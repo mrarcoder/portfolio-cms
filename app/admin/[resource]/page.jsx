@@ -5,4 +5,13 @@ import { getApi } from "../../../lib/api";
 import { resources } from "../../../lib/resources";
 
 export const dynamic="force-dynamic";
-export default async function ResourcePage({params}){const {resource}=await params;if(!resources[resource])notFound();const rows=await getApi(`/admin/${resource}`,{cookie:(await cookies()).toString()});return <ContentManager resource={resource} initialRows={rows}/>;}
+export default async function ResourcePage({params}){
+  const {resource}=await params;
+  if(!resources[resource])notFound();
+  const cookie=(await cookies()).toString();
+  const [rows,categoryOptions]=await Promise.all([
+    getApi(`/admin/${resource}`,{cookie}),
+    resource==='skills' ? getApi('/admin/skill-categories',{cookie}) : Promise.resolve([]),
+  ]);
+  return <ContentManager resource={resource} initialRows={rows} categoryOptions={categoryOptions}/>;
+}

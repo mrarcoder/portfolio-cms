@@ -6,6 +6,7 @@ implemented:
   - Profile and all accepted content CRUD, visibility, ordering, uploads, appearance settings, and dashboard counts.
   - Fresh-install, deployment, development, contribution, scope, architecture, and API documentation.
   - Futuristic glass interface with responsive admin navigation, modal content editors, toast feedback, subtle motion, and reduced-motion support.
+  - Header inbox with unread count, responsive mail-style message filters and reply flow, and category selection for skills.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
@@ -16,6 +17,7 @@ checks:
   - Every file reference in AGENTS.yml resolves.
   - ESLint, focused Node tests, Worker dry-run bundle, and optimized Next.js production build pass.
   - End-to-end smoke covers singleton setup, PBKDF2 login, session cookie, uploads, CRUD, ordering, hidden media, section visibility, contact inbox, rendered pages, and logout.
+  - Desktop and mobile visual checks cover the inbox list, unread badge, message detail popup, reply action, and skill category selector.
 blockers:
   - Production needs the owner's D1 database ID/name, R2 bucket name, final frontend origin, and deployment credentials.
 next_action: Configure the supplied Cloudflare resources, apply remote migrations, deploy the Worker, then connect and verify Vercel.
