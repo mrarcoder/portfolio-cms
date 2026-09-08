@@ -1,0 +1,2 @@
+import {cookies} from 'next/headers';import MessageList from '../../../components/message-list';import {getApi} from '../../../lib/api';
+export const dynamic='force-dynamic';export default async function Page(){const messages=await getApi('/admin/messages',{cookie:(await cookies()).toString()});return <><p className="eyebrow">Inbox</p><h1 className="admin-title">Messages</h1><MessageList initial={messages}/></>;}

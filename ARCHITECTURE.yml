@@ -1,0 +1,59 @@
+stack:
+  frontend: Next.js App Router, React, JavaScript, Tailwind CSS.
+  api: One Cloudflare Worker REST API.
+  database: Cloudflare D1 with SQL migrations.
+  files: Cloudflare R2.
+  hosting: Vercel frontend and Cloudflare backend; source on GitHub.
+boundaries:
+  next: Public rendering, admin/setup UI, API communication, metadata.
+  worker: Sole authority for authentication, validation, authorization, content, SQL, and files.
+  d1: Structured content, sessions, settings, file metadata, contact messages.
+  r2: Uploaded images and PDFs.
+structure:
+  app/: Public routes, project details, admin routes, setup, metadata routes.
+  components/: Small shared UI, portfolio sections, admin forms.
+  lib/: API client and a few necessary rendering helpers.
+  worker/src/: Worker entry, routing, authentication, validation, resource handlers.
+  worker/wrangler.jsonc: Worker configuration and resource bindings.
+  database/migrations/: Ordered SQL migrations.
+  public/: Application-owned static assets only.
+  tests/: Focused integration/security checks when introduced.
+  rule: Create directories only when needed; no apps/packages monorepo or theme SDK.
+requests:
+  browser: Call same-origin /api paths forwarded to the Worker.
+  forwarding: A thin Next.js route handler preserves paths, cookies, status codes, streaming media, and multipart bodies; all business logic remains in the Worker.
+  rationale: Keep admin cookies first-party on the free frontend hostname.
+  server_rendering: Public server components may call the configured Worker URL directly.
+  verification: Test login, logout, forwarded cookies, and upload limits through the deployed frontend origin.
+auth:
+  session: Random opaque session token; store only its hash and expiry in D1.
+  cookie: HttpOnly, Secure in production, SameSite=Lax, Path=/, no Domain attribute.
+  csrf: Validate configured frontend Origin on browser mutations; do not rely only on CORS or SameSite.
+  guards: Worker authenticates every private operation; frontend redirects are only UI protection.
+  logout: Revoke session in D1 and clear cookie.
+setup:
+  ownership: Require a deployment SETUP_TOKEN before creating the first administrator.
+  atomicity: Create owner and mark setup complete atomically; enforce singleton owner at database level.
+  lock: Reject setup after completion, including concurrent/replayed attempts.
+  disclosure: Setup status returns only whether setup is complete.
+freshness:
+  baseline: Fetch editable public content with no-store and render on request.
+  guarantee: A fresh page request after save shows current content; no rebuild or live-push system required.
+  later: Add caching only for measured need with explicit invalidation behavior.
+theme:
+  baseline: One presentation composed of reusable sections receiving data as props.
+  settings: Validated primary color and light/dark preference.
+  boundary: No runtime theme loader, theme registry, or second theme in V1.
+configuration:
+  frontend_server: [WORKER_API_URL]
+  worker_vars: [FRONTEND_ORIGIN]
+  worker_secrets: [SETUP_TOKEN, AUTH_PEPPER]
+  worker_bindings: [DB, MEDIA]
+  site_url: Stored in site settings and validated for metadata generation.
+  local: Document localhost values, local D1/R2, and development cookie behavior.
+  principle: Document every introduced variable; deployment IDs belong in binding configuration.
+deployment:
+  - Verify supported package versions, free-plan limits, R2 billing requirements, and request-size limits.
+  - Provide runnable local configuration and migration commands before remote provisioning.
+  - Document database migration, Worker deploy, frontend deploy, origin configuration, and initial setup order.
+  - Keep normal content updates independent of Git/build workflows.

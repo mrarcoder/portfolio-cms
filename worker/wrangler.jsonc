@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "portfolio-cms-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-06",
+  "workers_dev": true,
+  "vars": { "FRONTEND_ORIGIN": "http://127.0.0.1:3000" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "portfolio-cms",
+    "database_id": "00000000-0000-0000-0000-000000000000",
+    "migrations_dir": "../database/migrations"
+  }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "portfolio-cms-media" }]
+}

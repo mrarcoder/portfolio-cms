@@ -1,0 +1,40 @@
+repository: https://github.com/mrarcoder/portfolio-cms
+status: Local V1 implementation and clean-database workflow verified.
+requirements: Node.js 22.13+ or 24+, npm, and network access for initial dependency installation.
+quick_start:
+  - npm ci
+  - cp .env.example .env.local
+  - cp worker/.dev.vars.example worker/.dev.vars
+  - npm run db:migrate
+  - npm run dev
+urls:
+  portfolio: http://127.0.0.1:3000
+  admin_foundation: http://127.0.0.1:3000/admin
+  forwarded_health: http://127.0.0.1:3000/api/health
+  direct_health: http://127.0.0.1:8787/api/health
+commands:
+  dev: Starts frontend and Worker together; Ctrl+C stops both.
+  dev:web: Starts Next.js on port 3000; it stops with a clear error if another service already uses that port.
+  dev:worker: Starts only the local Worker.
+  db:migrate: Applies pending D1 migrations locally; repeat safely after pulling schema changes.
+  lint: ESLint checks JavaScript and JSX.
+  test: Runs Worker routing/error tests and migration invariants.
+  build: Builds Next.js with its supported Webpack option, which avoids restricted local Turbopack worker ports.
+  worker:check: Bundles Worker as a dry run; does not deploy.
+configuration:
+  WORKER_API_URL: Server-only Worker origin; local default is http://127.0.0.1:8787.
+  FRONTEND_ORIGIN: Exact expected browser origin; configured in worker/wrangler.jsonc.
+  SETUP_TOKEN: A 32+ character Worker secret used only to create the first administrator. Configure it in worker/.dev.vars locally and as a Worker secret remotely; it is never committed.
+  AUTH_PEPPER: A separate 32+ character Worker secret used to protect the browser-stretched password verifier; losing it prevents login.
+storage:
+  local: Wrangler persists local D1/R2 beneath worker/.wrangler; files are ignored by Git.
+  remote: No Cloudflare account, production database, or bucket is required for local development.
+  migrations: database/migrations; add migrations instead of editing ones already applied.
+  seeds: No owner, credentials, or fake portfolio data are seeded.
+production:
+  readiness: Application work is ready; a public release still requires real bindings, secrets, migrations, and cross-host verification.
+  resources: Create D1/R2 later, replace placeholder database ID, configure real frontend origin, and set Worker secrets.
+  boundaries: No deploy/push runs as part of development, tests, build, or worker dry run.
+references:
+  next: https://nextjs.org/docs/app/getting-started/installation
+  wrangler: https://developers.cloudflare.com/workers/wrangler/install-and-update/

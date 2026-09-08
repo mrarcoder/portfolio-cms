@@ -1,0 +1,38 @@
+goal: A reusable open-source personal portfolio CMS anyone can clone, deploy, and manage.
+pain_point: Update career information and resume from admin without editing code or redeploying.
+budget: Target zero recurring cost using free tiers and provider subdomains.
+budget_boundary: Verify current limits and billing requirements before provisioning; never promise unlimited free use.
+v1:
+  setup: One-time owner setup, one admin account, basic site configuration.
+  profile: Name, professional title, short/long bio, photo, location, contact details, resume PDF.
+  career: Experience, education, categorized skills, achievements, certifications.
+  projects: Title, slug, descriptions, one image, technology names, GitHub/live URLs, dates, progress state.
+  content_controls: Create, edit, delete, show/hide, and reorder lists with up/down buttons.
+  sections: Toggle public sections from settings; omit empty sections gracefully.
+  appearance: One polished theme, primary color, light/dark mode.
+  media: Upload images/PDFs from relevant forms; no separate media-library interface.
+  contact: Arbitrary social links, public contact form, admin inbox with read/delete actions.
+  seo: Titles, descriptions, canonical URLs, social previews, sitemap, robots rules.
+  quality: Responsive layouts, keyboard access, labels, visible focus, safe forms, useful error states.
+  delivery: Local setup, migrations, configuration examples, deployment guide, contribution guidance, license.
+public_design:
+  main_page: Profile and enabled career/project/contact sections.
+  detail_page: /projects/[slug]
+  principle: Do not create a separate page for every section unless it improves the agreed experience.
+admin_design:
+  navigation: [Overview, Profile, Experience, Education, Skills, Projects, Achievements, Certifications, Messages, Settings]
+  social_links: Manage under profile or settings.
+  dashboard: Simple useful counts; no analytics or activity-history system.
+deferred:
+  - Blog, categories, tags, and editorial draft/preview workflows.
+  - Additional themes, theme preview, theme installers, and theme marketplaces.
+  - Searchable media library and project image galleries.
+  - JSON import/export and backup-management UI.
+  - Global admin search and activity history.
+  - Drag-and-drop, advanced layout/font controls, and visual page builders.
+  - Email notifications, analytics integrations, and Docker deployment support.
+excluded:
+  - Public registration, multiple admins, complex RBAC, multi-tenancy, and SaaS billing.
+  - AI features, newsletters, comments, plugins, and unrelated content modules.
+  - Redis, Kafka, Elasticsearch, Kubernetes, microservices, and ORM frameworks.
+acceptance: Owner can update a job, skill, certification, project, and resume through admin and see saved changes publicly without a code deployment.

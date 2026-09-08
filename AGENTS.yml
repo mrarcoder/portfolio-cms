@@ -1,0 +1,35 @@
+project: Portfolio CMS
+purpose: Build the accepted small portfolio CMS; keep scope and implementation simple.
+read_first: [AGENTS.yml, SCOPE.yml, PROGRESS.yml]
+read_when_needed:
+  architecture_or_setup: ARCHITECTURE.yml
+  database_api_or_security: DATA_API.yml
+  implementation_order: ROADMAP.yml
+authority:
+  - Follow current user instructions and applicable environment instructions first.
+  - These files capture the accepted scope; earlier shared-chat proposals are superseded.
+  - Do not expand scope without a new user request.
+workflow:
+  - Inspect existing code and PROGRESS.yml before editing.
+  - Read only the additional specification relevant to the task.
+  - Briefly state the change and its verification, then implement it.
+  - Finish working vertical slices; do not substitute mock data for persistence.
+  - Run relevant checks, fix failures, and report actual results.
+  - Update PROGRESS.yml with completed work, checks, blockers, and next action.
+  - Update the relevant specification when the user changes a decision.
+rules:
+  language: JavaScript only; use .js and .jsx, no TypeScript source or configuration.
+  simplicity: Prefer direct functions, normal forms, reusable UI, and parameterized SQL.
+  dependencies: Add only for a concrete need; explain why existing capabilities are insufficient.
+  abstractions: Do not add generic repositories, plugin systems, service containers, or speculative layers.
+  content: Store owner content in D1/R2; never hardcode it in presentation components.
+  testing: Verify meaningful behavior and security boundaries; avoid tests that merely mirror implementation.
+  changes: Preserve unrelated work; do not rewrite working code without a task-driven reason.
+  autonomy: Resolve routine implementation choices within scope without repeatedly asking permission.
+  secrets: Never commit credentials or expose them in browser bundles, logs, or exports.
+  delivery: Do not claim deployment, tests, or features are complete without evidence.
+done_means:
+  - Real data persists and the public site reflects authorized changes without rebuilding.
+  - Errors, loading, and empty states work.
+  - Relevant authorization, validation, accessibility, and responsive behavior are verified.
+  - Documentation and progress match the implementation.

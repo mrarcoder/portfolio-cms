@@ -1,0 +1,2 @@
+import {cookies} from 'next/headers';import ProfileForm from '../../../components/profile-form';import {getApi} from '../../../lib/api';
+export const dynamic='force-dynamic';export default async function Page(){const profile=await getApi('/admin/profile',{cookie:(await cookies()).toString()});return <><p className="eyebrow">Content</p><h1 className="admin-title">Profile</h1><ProfileForm initial={profile}/></>;}

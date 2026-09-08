@@ -1,0 +1,2 @@
+import {cookies} from 'next/headers';import SettingsForm from '../../../components/settings-form';import {getApi} from '../../../lib/api';
+export const dynamic='force-dynamic';export default async function Page(){const settings=await getApi('/admin/settings',{cookie:(await cookies()).toString()});return <><p className="eyebrow">Configuration</p><h1 className="admin-title">Settings</h1><SettingsForm initial={settings}/></>;}

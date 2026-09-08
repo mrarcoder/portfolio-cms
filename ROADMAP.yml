@@ -1,0 +1,34 @@
+principle: Build usable vertical slices in order; every phase stays within SCOPE.yml.
+phases:
+  - id: 1
+    name: Foundation
+    deliver: Next.js and Worker skeletons, Tailwind, local D1/R2 bindings, initial migrations, API forwarding, health check.
+    verify: Documented local commands run; frontend reaches Worker; build and migrations pass.
+  - id: 2
+    name: Owner setup and login
+    deliver: Protected one-time setup, password hashing, persistent sessions, login/logout, guarded admin shell.
+    verify: Setup races, unauthorized access, CSRF/origin checks, cookie forwarding, expiry and logout.
+  - id: 3
+    name: First complete portfolio workflow
+    deliver: Editable profile and projects, inline photo/resume/project uploads, public homepage and project detail.
+    verify: Setup then login then save content; fresh public request reflects saved data without rebuild.
+  - id: 4
+    name: Career sections
+    deliver: Experience, education, categorized skills, achievements, certifications, social links, visibility and ordering.
+    verify: CRUD persists, foreign keys work, hidden content stays private, ordering matches public display.
+  - id: 5
+    name: Contact and appearance
+    deliver: Rate-limited contact form, inbox read/delete, section settings, primary color, light/dark mode, one polished theme.
+    verify: Spam limits, private inbox, settings validation, mobile layout, keyboard navigation and contrast.
+  - id: 6
+    name: SEO and release readiness
+    deliver: Metadata, social previews, sitemap, robots, production configuration examples, deployment and contribution instructions, license.
+    verify: Public metadata and URLs, no hidden sitemap entries, fresh-install rehearsal, appropriate lint/build/integration checks.
+release_test:
+  - Install from documented instructions and run migrations on an empty database.
+  - Configure one owner securely and prevent another setup.
+  - Update profile, job, skill, certification, project, and resume from admin.
+  - Confirm public changes appear without deployment and survive application restart.
+  - Confirm phone/mobile and keyboard usability.
+  - Verify deployment limits and cross-host authentication before claiming production readiness.
+scope_gate: Finish and verify V1 before considering anything marked deferred; later additions require user direction.

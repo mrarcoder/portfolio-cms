@@ -1,0 +1,27 @@
+status: local_v1_complete
+current_phase: 6
+implemented:
+  - Next.js public portfolio, project details, setup/login, protected admin, same-origin API proxy, metadata, sitemap, and robots.
+  - Cloudflare Worker authentication, content API, D1 persistence, R2 media validation/serving, contact limits, and inbox.
+  - Profile and all accepted content CRUD, visibility, ordering, uploads, appearance settings, and dashboard counts.
+  - Fresh-install, deployment, development, contribution, scope, architecture, and API documentation.
+completed:
+  - User accepted the reduced V1 scope.
+  - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
+  - Implemented all six local roadmap phases without adding deferred features.
+  - Rehearsed setup and every main workflow against a fresh isolated D1 and R2 state through the Next.js proxy.
+checks:
+  - All project YAML files parse successfully.
+  - Every file reference in AGENTS.yml resolves.
+  - ESLint, focused Node tests, Worker dry-run bundle, and optimized Next.js production build pass.
+  - End-to-end smoke covers singleton setup, PBKDF2 login, session cookie, uploads, CRUD, ordering, hidden media, section visibility, contact inbox, rendered pages, and logout.
+blockers:
+  - Production needs the owner's D1 database ID/name, R2 bucket name, final frontend origin, and deployment credentials.
+next_action: Configure the supplied Cloudflare resources, apply remote migrations, deploy the Worker, then connect and verify Vercel.
+decisions:
+  - One Next.js application and one Worker; no monorepo packages.
+  - One theme; no blog, theme ecosystem, or import/export in V1.
+  - Use same-origin API forwarding so browser sessions work on provider subdomains.
+  - Protect initial setup with a deployment token and singleton database constraint.
+  - Prefer fresh server reads before introducing caching.
+maintenance: Update this file after each implementation task; record actual checks and unresolved issues, not intended results.

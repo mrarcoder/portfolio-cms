@@ -1,0 +1,43 @@
+status: Ready for configuration after the owner supplies existing Cloudflare D1 and R2 resource details.
+prerequisites:
+  - Cloudflare account with one D1 database and one R2 bucket.
+  - Vercel account connected to the GitHub repository.
+  - Node.js 22.13+ or 24+ for local deployment commands.
+cloudflare:
+  wrangler_config:
+    - Replace the placeholder database_id in worker/wrangler.jsonc with the D1 database ID.
+    - Replace database_name and bucket_name if the supplied resource names differ.
+    - Set FRONTEND_ORIGIN to the exact final Vercel/custom origin, without a trailing slash.
+  secrets:
+    - Run npx wrangler secret put SETUP_TOKEN --config worker/wrangler.jsonc.
+    - Run npx wrangler secret put AUTH_PEPPER --config worker/wrangler.jsonc.
+    - Use different random values with at least 32 characters; store both safely outside Git.
+  database:
+    - Review migrations under database/migrations.
+    - Run npx wrangler d1 migrations apply DB --remote --config worker/wrangler.jsonc.
+  deploy:
+    - Run npx wrangler deploy --config worker/wrangler.jsonc.
+    - Record the resulting workers.dev origin for Vercel.
+vercel:
+  root: Repository root.
+  environment:
+    WORKER_API_URL: Exact HTTPS Worker origin without an /api suffix or trailing path.
+  deploy: Import the GitHub repository and deploy after the Worker is reachable.
+initial_setup:
+  - Open https://your-frontend.example/setup.
+  - Enter the same SETUP_TOKEN and create the single owner.
+  - Confirm /setup redirects to /login afterward.
+  - Sign in, configure Site URL under Settings, and add portfolio content.
+  - Rotate or remove SETUP_TOKEN after setup; the database singleton still prevents a second owner.
+verification:
+  - GET /api/health through the frontend returns status ready.
+  - Login response sets an HttpOnly, Secure, SameSite=Lax cookie on the frontend origin.
+  - Anonymous /admin access redirects to /login.
+  - A saved profile/project appears on a fresh public request without a deployment.
+  - Hidden records and their media are unavailable publicly.
+  - sitemap.xml contains only visible projects; robots.txt excludes admin/setup/login.
+cost_notes:
+  - Confirm current Worker, D1, R2, Vercel, and bandwidth free-tier limits before deployment.
+  - R2 may require payment-method enrollment even when usage remains within its free allowance.
+  - The authentication design performs PBKDF2 in the browser and a small HMAC in the Worker to fit the Worker free-plan CPU constraint.
+never_commit: [SETUP_TOKEN, AUTH_PEPPER, Cloudflare API tokens, local .dev.vars, .env.local]

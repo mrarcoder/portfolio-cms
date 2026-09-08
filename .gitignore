@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+.worker-build/
+.wrangler/
+worker/.wrangler/
+.env*
+!.env.example
+.dev.vars*
+!.dev.vars.example
+worker/.dev.vars*
+!worker/.dev.vars.example
+*.log
+.DS_Store
+.codex/
+.agents/
+coverage/

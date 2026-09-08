@@ -1,0 +1,80 @@
+database:
+  conventions:
+    - Use parameterized SQL, foreign keys, unique constraints, and ordered migrations.
+    - Use integer IDs and UTC timestamps; date-only career fields use YYYY-MM-DD.
+    - Order content lists by sort_order then id; visible defaults to false for new content.
+    - Validate referenced media IDs and relationships before saving.
+    - Index actual lookup/filter needs; do not index every field.
+  tables:
+    users: id singleton, username unique, password_hash, created_at, updated_at
+    sessions: token_hash primary key, user_id foreign key, expires_at, created_at
+    profile: id singleton, name, title, short_bio, long_bio, photo_media_id, location, public_email, public_phone, resume_media_id, updated_at
+    experiences: id, company, position, location, start_date, end_date nullable, is_current, description, sort_order, visible, timestamps
+    education: id, institution, degree, field, start_date, end_date nullable, description, sort_order, visible, timestamps
+    skill_categories: id, name, sort_order, visible
+    skills: id, category_id nullable, name, sort_order, visible, timestamps
+    projects: id, title, slug unique, summary, description, image_media_id, technologies_json, github_url, live_url, start_date, end_date nullable, progress, sort_order, visible, timestamps
+    achievements: id, title, organization, date, description, url, sort_order, visible, timestamps
+    certifications: id, name, issuer, issue_date, expiry_date nullable, credential_id, credential_url, file_media_id, sort_order, visible, timestamps
+    social_links: id, label, url, sort_order, visible
+    messages: id, name, email, subject, message, is_read, created_at
+    settings: key primary key, value_json, updated_at
+    media: id, storage_key unique, original_name, mime_type, byte_size, alt_text, created_at
+    rate_limits: key primary key, attempt_count, window_end
+  notes:
+    timestamps: Expand to created_at and updated_at where indicated.
+    technologies_json: Validated bounded array of strings; no global technology-management subsystem.
+    project_progress: completed, in_progress, archived; independent from public visibility.
+    settings: Allowlisted site identity, site URL, SEO defaults, enabled sections, primary color, color mode, setup state.
+    private_settings: Setup state and security configuration cannot be written through ordinary settings updates.
+    rate_limits: Bounded persistent counters with expiry cleanup; no external rate-limit service.
+    migrations: Include schema, constraints, and necessary indexes; optional demo seeds must be explicit.
+api:
+  prefix: /api
+  responses:
+    success: '{"success":true,"data":...}'
+    error: '{"success":false,"error":"Safe message"}'
+    exception: File responses return bytes with appropriate headers.
+  routes:
+    setup: GET /setup/status; POST /setup with setup token and initial account/site/profile values.
+    auth: GET /auth/challenge; POST /auth/login; POST /auth/logout; GET /auth/me.
+    public: GET /portfolio; GET /projects/:slug; GET /media/:id; POST /messages.
+    admin_profile: GET and PUT /admin/profile.
+    admin_summary: GET /admin/summary with small dashboard counts.
+    admin_lists: GET and POST /admin/:resource; PUT and DELETE /admin/:resource/:id.
+    ordering: PUT /admin/:resource/order with validated IDs in desired order.
+    settings: GET and PUT /admin/settings with field allowlist.
+    files: POST /admin/media multipart upload; DELETE /admin/media/:id if unreferenced.
+    inbox: GET /admin/messages; PUT /admin/messages/:id/read; DELETE /admin/messages/:id.
+  resources: [experiences, education, skill-categories, skills, projects, achievements, certifications, social-links]
+  implementation: Explicit resource allowlist and validation; never interpolate arbitrary request resource names into SQL.
+  public_rules:
+    - Return only visible records from enabled sections; hidden projects return 404.
+    - Hide skills when their category is hidden.
+    - Exclude credentials, sessions, messages, setup internals, and private settings.
+    - Public media serving requires a reference from publicly exposed content; admin may access its own private media.
+    - Avoid public caching of mutable visibility-sensitive content in V1.
+  private_rules:
+    - Authenticate every /admin request and return Cache-Control no-store.
+    - Use bounded pagination for inbox and growing admin lists.
+    - Order changes must validate membership, duplicates, and missing IDs before atomic update.
+security:
+  passwords: Browser derives a 600000-round PBKDF2-SHA-256 verifier from a random salt; Worker stores its HMAC-SHA-256 using AUTH_PEPPER. Production requires TLS because the verifier is the submitted credential.
+  limits: Apply login and contact-submission limits with persistent bounded counters; add a contact honeypot.
+  validation: Allowlist fields; bound lengths, arrays, body sizes; validate dates, slugs, colors, emails, and URL schemes.
+  text: Plain text content in V1; never render stored input as raw HTML.
+  uploads:
+    - Accept only JPEG, PNG, WebP, and PDF; reject SVG, HTML, and executable content.
+    - Validate signatures, type, and actual byte count; generate storage keys server-side.
+    - Start with a 3 MiB application limit and verify it against hosting/proxy limits.
+    - Serve PDFs as downloads and all media with correct content types and nosniff.
+    - Upload first, save reference second; failed replacements must preserve the previous working file.
+    - Delete only unreferenced files; clean failed-upload leftovers without breaking valid references.
+  errors: Use appropriate status codes; never expose SQL, credentials, stack traces, or session tokens.
+verification:
+  - Concurrent setup attempts create only one owner; subsequent setup is rejected.
+  - Anonymous requests cannot read inbox, write content, upload files, or change settings.
+  - Invalid origins and expired/revoked sessions cannot perform private mutations.
+  - Hidden records, disabled sections, and their private media stay out of public responses and sitemap.
+  - Save, reorder, replace media, and delete behave correctly with persisted data.
+  - Oversized/unsupported uploads and malicious input are rejected safely.

@@ -1,0 +1,5 @@
+# Copy to worker/.dev.vars and replace both values. Use different random values
+# of at least 32 characters. SETUP_TOKEN is entered once in the setup screen;
+# AUTH_PEPPER remains a Worker secret and must stay stable after setup.
+SETUP_TOKEN=replace-with-a-long-random-value
+AUTH_PEPPER=replace-with-a-different-long-random-value
