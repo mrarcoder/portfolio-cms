@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createPasswordVerifier, createSalt } from "../lib/browser-password";
+import Toast from "./toast";
 
 function Field({ id, label, type = "text", value, onChange, autoComplete, hint }) {
   return <label className="field" htmlFor={id}><span>{label}</span><input id={id} type={type} value={value} onChange={onChange} autoComplete={autoComplete} required minLength={type === "password" ? 12 : undefined} maxLength={type === "password" ? 128 : undefined} />{hint && <small>{hint}</small>}</label>;
@@ -49,7 +50,7 @@ export default function AuthForm({ mode }) {
     {isSetup && <><Field id="site-name" label="Site name" value={siteName} onChange={(event) => setSiteName(event.target.value)} autoComplete="organization" /><Field id="setup-token" label="Setup token" type="password" value={setupToken} onChange={(event) => setSetupToken(event.target.value)} autoComplete="off" hint="Keep this deployment secret private." /></>}
     <Field id="username" label="Username" value={username} onChange={(event) => setUsername(event.target.value)} autoComplete="username" hint="3–40 letters, numbers, hyphens, or underscores." />
     <Field id="password" label="Password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete={isSetup ? "new-password" : "current-password"} hint="Use at least 12 characters." />
-    {message && <p className="form-message" role="alert">{message}</p>}
     <button className="button" type="submit" disabled={submitting}>{submitting ? "Please wait…" : isSetup ? "Create administrator" : "Sign in"}</button>
+    <Toast message={message} clear={setMessage} error />
   </form>;
 }

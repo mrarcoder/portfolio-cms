@@ -9,7 +9,7 @@ v1:
   projects: Title, slug, descriptions, one image, technology names, GitHub/live URLs, dates, progress state.
   content_controls: Create, edit, delete, show/hide, and reorder lists with up/down buttons.
   sections: Toggle public sections from settings; omit empty sections gracefully.
-  appearance: One polished theme, primary color, light/dark mode.
+  appearance: One responsive dark glass theme with restrained motion, popup editors and notifications, primary color, and optional light mode.
   media: Upload images/PDFs from relevant forms; no separate media-library interface.
   contact: Arbitrary social links, public contact form, admin inbox with read/delete actions.
   seo: Titles, descriptions, canonical URLs, social previews, sitemap, robots rules.

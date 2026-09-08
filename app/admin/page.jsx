@@ -8,22 +8,14 @@ export default async function AdminPage() {
   const summary = await getApi("/admin/summary", { cookie: (await cookies()).toString() });
   return (
     <>
-      <p className="eyebrow">Your workspace</p>
-      <h1 className="admin-title">Portfolio overview</h1>
-      <p className="muted">A quick view of your content and inbox.</p>
+      <div className="page-heading"><div><p className="eyebrow">Control center</p><h1 className="admin-title">Portfolio overview</h1><p className="muted">Everything important, visible at a glance.</p></div><Link className="button no-margin" href="/admin/projects">Manage projects <span aria-hidden="true">↗</span></Link></div>
       <div className="admin-panels">
-        <section className="panel">
-          <h2>Content</h2>
-          <div className="status-line"><span>Projects</span><strong>{summary.projects}</strong></div>
-          <div className="status-line"><span>Experience entries</span><strong>{summary.experiences}</strong></div>
-          <div className="status-line"><span>Certifications</span><strong>{summary.certifications}</strong></div>
-        </section>
-        <section className="panel">
-          <h2>Inbox</h2>
-          <p className="muted"><strong>{summary.unread_messages}</strong> unread message{summary.unread_messages===1?"":"s"}.</p>
-          <Link className="text-link" href="/admin/messages">Open messages</Link>
-        </section>
+        <Link className="panel metric-card" href="/admin/projects"><span className="metric-icon">◇</span><strong>{summary.projects}</strong><span>Projects</span><small>Curated work</small></Link>
+        <Link className="panel metric-card" href="/admin/experiences"><span className="metric-icon">⌁</span><strong>{summary.experiences}</strong><span>Experiences</span><small>Career entries</small></Link>
+        <Link className="panel metric-card" href="/admin/certifications"><span className="metric-icon">✦</span><strong>{summary.certifications}</strong><span>Certificates</span><small>Verified skills</small></Link>
+        <Link className={`panel metric-card ${summary.unread_messages ? "metric-live" : ""}`} href="/admin/messages"><span className="metric-icon">↗</span><strong>{summary.unread_messages}</strong><span>Unread</span><small>Inbox messages</small></Link>
       </div>
+      <section className="panel overview-banner"><div><p className="eyebrow">Public experience</p><h2>Your portfolio updates instantly.</h2><p className="muted">Edit content here, then open the public site to see the latest version without another deployment.</p></div><Link className="secondary-button" href="/">View live portfolio</Link></section>
     </>
   );
 }

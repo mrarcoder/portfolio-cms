@@ -18,8 +18,8 @@ export default async function AdminLayout({ children }) {
     <>
       <SiteHeader admin />
       <div className="container admin-grid">
-        <aside className="sidebar"><p className="muted m-0 mb-3">Signed in as <strong>{user.username}</strong></p><nav aria-label="Admin navigation" className="admin-nav">{[['/admin','Overview'],['/admin/profile','Profile'],['/admin/experiences','Experience'],['/admin/education','Education'],['/admin/skill-categories','Skill categories'],['/admin/skills','Skills'],['/admin/projects','Projects'],['/admin/achievements','Achievements'],['/admin/certifications','Certifications'],['/admin/social-links','Social links'],['/admin/messages','Messages'],['/admin/settings','Settings']].map(([href,label])=><Link href={href} key={href}>{label}</Link>)}</nav><LogoutButton /></aside>
-        <main id="main">{children}</main>
+        <aside className="sidebar"><div className="admin-user"><span className="user-orb" aria-hidden="true">{user.username[0]}</span><div><small>Workspace</small><strong>{user.username}</strong></div></div><nav aria-label="Admin navigation" className="admin-nav">{[['/admin','Overview'],['/admin/profile','Profile'],['/admin/experiences','Experience'],['/admin/education','Education'],['/admin/skill-categories','Skill categories'],['/admin/skills','Skills'],['/admin/projects','Projects'],['/admin/achievements','Achievements'],['/admin/certifications','Certifications'],['/admin/social-links','Social links'],['/admin/messages','Messages'],['/admin/settings','Settings']].map(([href,label],index)=><Link href={href} key={href}><span>{String(index+1).padStart(2,'0')}</span>{label}</Link>)}</nav><LogoutButton /></aside>
+        <main id="main" className="admin-main">{children}</main>
       </div>
     </>
   );
