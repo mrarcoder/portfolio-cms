@@ -306,14 +306,20 @@ Stop the other service using port 3000 or 8787, then run `npm run dev` again. Th
 ## Project structure
 
 ```text
-app/                    Next.js pages, metadata routes, and API proxy
-components/             Public and admin interface components
-database/migrations/    Ordered D1 migrations
-lib/                    Server API and browser password helpers
-scripts/                Local development and smoke-test scripts
-tests/                  Focused Node tests
-worker/src/             Worker routing, auth, content, and media logic
-worker/wrangler.jsonc   Cloudflare bindings and deployment configuration
+app/                       Next.js pages, layouts, metadata, and API proxy
+components/admin/          Admin navigation, editors, inbox, and settings UI
+components/auth/           Setup and sign-in UI
+components/portfolio/      Public portfolio and contact UI
+components/ui/             UI shared across feature areas
+database/migrations/       Ordered D1 migrations
+lib/admin/                 Admin resource definitions and payload helpers
+lib/auth/                  Browser-side password derivation
+lib/api.js                 Server-side Worker API client
+scripts/                   Local development and route smoke-test scripts
+styles/                    Base, admin, auth, portfolio, and responsive CSS
+tests/                     Focused Node integration and security tests
+worker/src/                Worker routing, auth, content, and media logic
+worker/wrangler.jsonc      Cloudflare bindings and deployment configuration
 ```
 
 The accepted V1 boundary is documented in [SCOPE.yml](SCOPE.yml). Implementation and security decisions are in [ARCHITECTURE.yml](ARCHITECTURE.yml) and [DATA_API.yml](DATA_API.yml). See [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes.

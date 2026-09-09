@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Toast from "./toast";
+import Toast from "../ui/toast";
 
 export default function ContactForm() {
   const [message,setMessage] = useState("");

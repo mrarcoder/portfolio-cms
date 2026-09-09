@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createPasswordVerifier, createSalt } from "../lib/browser-password";
-import Toast from "./toast";
+import { createPasswordVerifier, createSalt } from "../../lib/auth/browser-password";
+import Toast from "../ui/toast";
 
 function Field({ id, label, type = "text", value, onChange, autoComplete, hint }) {
   return <label className="field" htmlFor={id}><span>{label}</span><input id={id} type={type} value={value} onChange={onChange} autoComplete={autoComplete} required minLength={type === "password" ? 12 : undefined} maxLength={type === "password" ? 128 : undefined} />{hint && <small>{hint}</small>}</label>;

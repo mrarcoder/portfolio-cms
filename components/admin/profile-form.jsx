@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Toast from "./toast";
+import Toast from "../ui/toast";
 
 const fields = [["name","Name"],["title","Professional title"],["short_bio","Short bio","textarea"],["long_bio","About","textarea"],["location","Location"],["public_email","Public email","email"],["public_phone","Public phone","tel"]];
 

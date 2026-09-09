@@ -11,8 +11,14 @@ boundaries:
   r2: Uploaded images and PDFs.
 structure:
   app/: Public routes, project details, admin routes, setup, metadata routes.
-  components/: Small shared UI, portfolio sections, admin forms.
-  lib/: API client and a few necessary rendering helpers.
+  components/admin/: Admin shell, content editors, inbox, profile, and settings UI.
+  components/auth/: Initial setup and sign-in UI.
+  components/portfolio/: Public portfolio, contact form, and site-logo UI.
+  components/ui/: UI shared across feature areas.
+  lib/admin/: Admin resource definitions and payload conversion.
+  lib/auth/: Browser password derivation.
+  lib/api.js: Server-only Worker API client.
+  styles/: Base, admin, auth, portfolio, and responsive styles imported by app/globals.css.
   worker/src/: Worker entry, routing, authentication, validation, resource handlers.
   worker/wrangler.jsonc: Worker configuration and resource bindings.
   database/migrations/: Ordered SQL migrations.

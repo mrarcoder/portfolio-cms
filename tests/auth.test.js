@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
 import worker from "../worker/src/index.js";
-import { createPasswordVerifier, createSalt } from "../lib/browser-password.js";
+import { createPasswordVerifier, createSalt } from "../lib/auth/browser-password.js";
 
 class Statement {
   constructor(database, sql) { this.database = database; this.sql = sql; this.values = []; }

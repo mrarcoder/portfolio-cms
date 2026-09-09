@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { fromRecord, resources, toPayload } from "../lib/resources";
-import Toast from "./toast";
-import SiteLogo, { siteHost } from "./site-logo";
+import { fromRecord, resources, toPayload } from "../../lib/admin/resources";
+import SiteLogo, { siteHost } from "../portfolio/site-logo";
+import Toast from "../ui/toast";
 
 function blank(fields) {
   return Object.fromEntries(fields.map(([name,,type,,options]) => [name, type === "checkbox" ? false : type === "select" ? options[0] : ""]));

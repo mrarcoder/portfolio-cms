@@ -1,0 +1,83 @@
+@media (max-width: 1000px) {
+  .admin-panels { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .content-row { align-items: flex-start; flex-direction: column; gap: 17px; }
+  .row-actions { width: 100%; justify-content: flex-start; }
+  .public-hero { grid-template-columns: 1fr .72fr; gap: 45px; }
+  .portrait-chip { right: -10px; }
+  .mail-toolbar { grid-template-columns: 1fr 1fr 1fr; }
+  .mail-search { grid-column: 1/-1; }
+}
+
+@media (max-width: 760px) {
+  .container { width: calc(100% - 30px); }
+  .header-inner { min-height: 70px; }
+  .brand-soft { display: none; }
+  .header-actions { gap: 6px; }
+  .header-action { padding: 9px 11px; }
+  .admin-grid { grid-template-columns: 1fr; gap: 25px; padding-top: 24px; }
+  .sidebar { position: static; padding: 13px; }
+  .admin-user { padding-bottom: 12px; }
+  .admin-nav { display: flex; overflow-x: auto; padding: 10px 0 4px; scrollbar-width: none; }
+  .admin-nav::-webkit-scrollbar { display: none; }
+  .admin-nav a { flex: 0 0 auto; }
+  .admin-nav a span { display: none; }
+  .text-button { width: auto; margin: 5px 0 0; }
+  .admin-panels { grid-template-columns: 1fr 1fr; }
+  .metric-card { min-height: 170px; padding: 21px; }
+  .metric-card strong { font-size: 40px; }
+  .overview-banner, .page-heading, .content-row { align-items: flex-start; flex-direction: column; }
+  .content-row { gap: 17px; }
+  .row-actions { width: 100%; }
+  .editor-form, .form-two { grid-template-columns: 1fr; }
+  .editor-form .field { grid-column: 1; }
+  .modal-backdrop { padding: 10px; }
+  .modal-card { max-height: 94vh; padding: 20px; border-radius: 20px; }
+  .modal-head { top: -20px; margin: -20px -20px 0; padding: 20px; }
+  .public-nav { gap: 13px; }
+  .public-nav > a:not(.nav-cta) { display: none; }
+  .public-hero { min-height: auto; grid-template-columns: 1fr; padding-block: 62px 85px; }
+  .public-hero h1 { font-size: clamp(50px,15vw,78px); }
+  .portrait-frame { width: min(92%,480px); margin-inline: auto; }
+  .portrait, .portrait-placeholder { height: 520px; min-height: 0; }
+  .portrait-chip { right: -8px; bottom: 25px; }
+  .portfolio-section { padding-block: 75px; }
+  .timeline article, .contact-grid, .project-body { grid-template-columns: 1fr; gap: 18px; }
+  .timeline article { padding-block: 26px; }
+  .timeline-index { display: none; }
+  .project-grid, .simple-grid, .skill-groups { grid-template-columns: 1fr; }
+  .project-card img, .project-placeholder { height: 230px; }
+  .contact-grid { gap: 40px; }
+  .auth-card { padding: 29px 23px; border-radius: 22px; }
+  .auth-card .brand { margin-bottom: 48px; }
+  .mail-toolbar { grid-template-columns: 1fr 1fr; }
+  .mail-search { grid-column: 1/-1; }
+  .mail-filter:nth-of-type(4) { display: none; }
+  .mail-clear { align-self: end; }
+  .mail-list-head span:last-child { display: none; }
+  .mail-row { grid-template-columns: 34px minmax(0,1fr) auto; gap: 10px; padding: 13px; }
+  .mail-sender { grid-column: 2; }
+  .mail-summary { grid-column: 2/4; }
+  .mail-date { grid-column: 3; grid-row: 1; }
+  .mail-avatar { grid-row: 1/3; }
+  .message-detail-meta { grid-template-columns: 34px 1fr; }
+  .message-detail-meta time { grid-column: 2; }
+}
+
+@media (max-width: 460px) {
+  .admin-panels { grid-template-columns: 1fr; }
+  .metric-card { min-height: 155px; }
+  .row-copy { align-items: flex-start; }
+  .row-index { display: none; }
+  .row-actions button { flex: 1; }
+  .portrait, .portrait-placeholder { height: 420px; }
+  .toast { right: 16px; bottom: 16px; }
+  .header-actions .header-action:last-child { display: none; }
+  .mail-filter { grid-column: span 1; }
+  .mail-filter:nth-of-type(3) { grid-column: 1/-1; }
+  .mail-clear { grid-column: 1/-1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

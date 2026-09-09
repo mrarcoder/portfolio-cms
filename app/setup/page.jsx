@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import AuthForm from "../../components/auth-form";
+import AuthForm from "../../components/auth/auth-form";
 import { getApi } from "../../lib/api";
 
 export const metadata = { title: "Set up", robots: { index: false, follow: false } };

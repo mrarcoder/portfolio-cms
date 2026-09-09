@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import Toast from "./toast";
+import Toast from "../ui/toast";
 
 function asDate(value) {
   if (!value) return new Date(0);

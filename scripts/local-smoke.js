@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { createPasswordVerifier, createSalt } from "../lib/browser-password.js";
+import { createPasswordVerifier, createSalt } from "../lib/auth/browser-password.js";
 
 const base = (process.env.SMOKE_ORIGIN || "http://127.0.0.1:3010").replace(/\/$/, "");
 const setupToken = process.env.SMOKE_SETUP_TOKEN || "test-setup-token-at-least-32-characters";
@@ -89,6 +89,33 @@ assert.match(await home.text(), /Ada Example/);
 const detail = await fetch(`${base}/projects/visible-project`);
 assert.equal(detail.status, 200);
 assert.match(await detail.text(), /Project details/);
+
+const pageRoutes = [
+  "/",
+  "/login",
+  "/setup",
+  "/projects/visible-project",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/admin",
+  "/admin/profile",
+  "/admin/experiences",
+  "/admin/education",
+  "/admin/skill-categories",
+  "/admin/skills",
+  "/admin/projects",
+  "/admin/achievements",
+  "/admin/certifications",
+  "/admin/social-links",
+  "/admin/messages",
+  "/admin/settings",
+];
+for (const path of pageRoutes) {
+  const response = await fetch(`${base}${path}`, { headers:{ Cookie:cookie } });
+  assert.equal(response.status, 200, `${path} returned ${response.status}`);
+  await response.arrayBuffer();
+}
+assert.equal((await fetch(`${base}/route-that-does-not-exist`)).status, 404);
 
 ok(await api("/auth/logout", { method:"POST", body:{} }), 200);
 assert.equal((await api("/admin/summary")).response.status, 401);

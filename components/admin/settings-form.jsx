@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Toast from "./toast";
+import Toast from "../ui/toast";
 
 const sectionNames = ["experience","education","skills","projects","achievements","certifications","contact"];
 
