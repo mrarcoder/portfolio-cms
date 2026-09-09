@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Icon from "../ui/icon";
 import Toast from "../ui/toast";
 
 function asDate(value) {
@@ -95,7 +96,7 @@ export default function MessageList({ initial }) {
           <label className="mail-filter"><span>Status</span><select value={status} onChange={(event) => setStatus(event.target.value)}><option value="all">All mail</option><option value="unread">Unread</option><option value="read">Read</option></select></label>
           <label className="mail-filter"><span>Date</span><input type="date" value={date} onChange={(event) => setDate(event.target.value)}/></label>
           <label className="mail-filter"><span>Order</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="newest">Newest</option><option value="oldest">Oldest</option></select></label>
-          {(query || date || status !== "all" || sort !== "newest") && <button className="mail-clear" type="button" onClick={clearFilters}>Clear</button>}
+          {(query || date || status !== "all" || sort !== "newest") && <button className="mail-clear icon-only" type="button" onClick={clearFilters} aria-label="Clear filters" title="Clear filters"><Icon name="filterClear"/></button>}
         </div>
         <div className="mail-list-head"><span>{filtered.length} {filtered.length === 1 ? "message" : "messages"}</span><span>Click a message to read and reply</span></div>
         {filtered.length ? <div className="mail-list">{filtered.map((row) => {
@@ -112,10 +113,10 @@ export default function MessageList({ initial }) {
 
       {selected && <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setSelected(null)}>
         <article className="modal-card message-modal" role="dialog" aria-modal="true" aria-labelledby="message-title">
-          <div className="modal-head"><div><p className="eyebrow">Message from {selected.name}</p><h2 id="message-title">{selected.subject || "Portfolio message"}</h2></div><button className="icon-button" type="button" onClick={() => setSelected(null)} aria-label="Close message" autoFocus>×</button></div>
+          <div className="modal-head"><div><p className="eyebrow">Message from {selected.name}</p><h2 id="message-title">{selected.subject || "Portfolio message"}</h2></div><button className="icon-button" type="button" onClick={() => setSelected(null)} aria-label="Close message" title="Close" autoFocus><Icon name="cancel"/></button></div>
           <div className="message-detail-meta"><span className="mail-avatar" aria-hidden="true">{selected.name?.[0] || "?"}</span><div><strong>{selected.name}</strong><a href={`mailto:${selected.email}`}>{selected.email}</a></div><time dateTime={selected.created_at}>{asDate(selected.created_at).toLocaleString()}</time></div>
           <p className="pre-line message-detail-body">{selected.message}</p>
-          <div className="message-actions"><a className="button no-margin" href={replyLink(selected)}>↩ Reply by email</a><button className="secondary-button danger" type="button" onClick={() => remove(selected)}>Delete</button></div>
+          <div className="message-actions"><a className="button icon-only no-margin" href={replyLink(selected)} aria-label={`Reply to ${selected.name} by email`} title="Reply by email"><Icon name="reply"/></a><button className="secondary-button icon-only danger" type="button" onClick={() => remove(selected)} aria-label="Delete message" title="Delete"><Icon name="delete"/></button></div>
         </article>
       </div>}
       <Toast message={message} clear={setMessage} error={error}/>

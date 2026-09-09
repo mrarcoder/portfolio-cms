@@ -98,7 +98,7 @@ legend { padding: 0 8px; color: #c8d5d0; font-size: 12px; font-weight: 650; }
 .modal-card { width: min(820px,100%); max-height: min(88vh,900px); overflow: auto; padding: 26px; border-radius: 25px; animation: modal-in .28s cubic-bezier(.2,.8,.2,1) both; }
 .modal-head { position: sticky; top: -26px; z-index: 2; display: flex; align-items: center; justify-content: space-between; margin: -26px -26px 0; padding: 23px 26px 18px; border-bottom: 1px solid var(--line); background: rgba(13,19,18,.92); backdrop-filter: blur(18px); }
 .modal-head h2 { margin: 7px 0 0; font-size: 25px; }
-.icon-button { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); background: rgba(255,255,255,.04); font-size: 22px; cursor: pointer; }
+.icon-button { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); background: rgba(255,255,255,.04); cursor: pointer; }
 
 .toast { position: fixed; right: 24px; bottom: 24px; z-index: 200; display: grid; grid-template-columns: auto minmax(0,1fr) auto; width: min(390px,calc(100% - 32px)); align-items: center; gap: 12px; padding: 13px 14px; border: 1px solid rgba(114,241,193,.28); border-radius: 15px; color: var(--text); background: rgba(12,22,19,.92); box-shadow: 0 20px 60px rgba(0,0,0,.48), inset 0 1px rgba(255,255,255,.08); backdrop-filter: blur(20px); font-size: 13px; animation: toast-in .32s cubic-bezier(.2,.8,.2,1) both; }
 .toast-icon { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; color: #06100d; background: var(--accent); font-weight: 850; }
@@ -114,6 +114,7 @@ legend { padding: 0 8px; color: #c8d5d0; font-size: 12px; font-weight: 650; }
 .mail-filter select, .mail-filter input { min-height: 43px; padding: 0 11px; border: 1px solid var(--line); border-radius: 11px; outline: 0; color: var(--text); background: #0b1110; color-scheme: dark; font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; }
 .mail-filter select:focus, .mail-filter input:focus { border-color: var(--line-bright); }
 .mail-clear { min-height: 43px; padding: 0 13px; border: 1px solid var(--line); border-radius: 11px; color: var(--muted); background: var(--surface-soft); cursor: pointer; }
+.mail-clear.icon-only { display: grid; width: 43px; min-width: 43px; padding: 0; place-items: center; }
 .mail-clear:hover { color: var(--text); border-color: var(--line-bright); }
 .mail-list-head { display: flex; justify-content: space-between; gap: 20px; padding: 11px 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 10px; letter-spacing: .04em; }
 .mail-list { display: grid; }

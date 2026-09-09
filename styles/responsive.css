@@ -73,11 +73,10 @@
   .metric-card { min-height: 155px; }
   .row-copy { align-items: flex-start; }
   .row-index { display: none; }
-  .row-actions button { flex: 1; }
+  .row-actions button { flex: 0 0 37px; }
   .profile-photo-card { align-items: flex-start; flex-direction: column; }
   .profile-photo-preview { width: 128px; height: 160px; }
-  .profile-photo-actions .secondary-button { flex: 1; }
-  .photo-editor-actions { align-items: stretch; flex-direction: column-reverse; }
+  .profile-photo-actions .secondary-button { flex: 0 0 38px; }
   .portrait, .portrait-placeholder { height: 420px; }
   .toast { right: 16px; bottom: 16px; }
   .header-actions .header-action:last-child { display: none; }
