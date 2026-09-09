@@ -33,8 +33,11 @@
   .modal-backdrop { padding: 10px; }
   .modal-card { max-height: 94vh; padding: 20px; border-radius: 20px; }
   .modal-head { top: -20px; margin: -20px -20px 0; padding: 20px; }
-  .public-nav { gap: 13px; }
-  .public-nav > a:not(.nav-cta) { display: none; }
+  .portfolio-shell .public-header .header-inner { flex-wrap: wrap; gap: 10px; padding-block: 12px 10px; }
+  .public-nav { order: 3; width: 100%; gap: 7px; padding-bottom: 2px; }
+  .public-nav a { padding: 8px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-soft); }
+  .public-nav .nav-cta { padding: 8px 10px; }
+  .portfolio-section { scroll-margin-top: 135px; }
   .public-hero { min-height: auto; grid-template-columns: 1fr; padding-block: 62px 85px; }
   .public-hero h1 { font-size: clamp(50px,15vw,78px); }
   .portrait-frame { width: min(92%,480px); margin-inline: auto; }

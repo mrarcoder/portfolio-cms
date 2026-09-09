@@ -85,7 +85,13 @@ assert.deepEqual(summary, { projects:2, experiences:1, unread_messages:0, certif
 
 const home = await fetch(base);
 assert.equal(home.status, 200);
-assert.match(await home.text(), /Ada Example/);
+const homeHtml = await home.text();
+assert.match(homeHtml, /Ada Example/);
+for (const section of ["about", "experience", "projects", "skills", "education", "certifications", "contact"]) {
+  assert.match(homeHtml, new RegExp(`href="#${section}"`));
+  assert.match(homeHtml, new RegExp(`id="${section}"`));
+}
+assert.doesNotMatch(homeHtml, /href="#achievements"/);
 const detail = await fetch(`${base}/projects/visible-project`);
 assert.equal(detail.status, 200);
 assert.match(await detail.text(), /Project details/);

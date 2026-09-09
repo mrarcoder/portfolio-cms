@@ -11,6 +11,7 @@ implemented:
   - Admin content cards use shrink-safe text and action regions, with stacked project rows at constrained dashboard widths.
   - Frontend code is organized by admin, auth, portfolio, and shared UI domains; helper and stylesheet folders follow the same boundaries.
   - AI references, specifications, workflows, progress, and contributor guidance are indexed under docs/.
+  - Public navigation is generated from the same visibility and content conditions as every rendered portfolio section, including responsive access on mobile.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
@@ -25,6 +26,7 @@ checks:
   - Full-page mobile portfolio and desktop social-link editor checks cover project containment and live logo preview.
   - Fresh-state production smoke verifies all 18 concrete page routes, the API proxy, every content resource, metadata routes, authentication, media, inbox, and the not-found boundary after restructuring.
   - Documentation YAML parses and every docs/AGENTS.yml file reference resolves after the documentation move.
+  - Fresh-state smoke asserts that each enabled portfolio navigation link has a rendered target and disabled sections are omitted.
 blockers:
   - Production needs the owner's D1 database ID/name, R2 bucket name, final frontend origin, and deployment credentials.
 next_action: Configure the supplied Cloudflare resources, apply remote migrations, deploy the Worker, then connect and verify Vercel.
