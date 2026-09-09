@@ -15,6 +15,7 @@ implemented:
   - Root hydration tolerates browser-extension attributes on the html element while preserving mismatch checks inside the application tree.
   - The admin profile editor shows the active portrait and supports full viewing, replacement, 4:5 cropping, zoom, position, rotation, brightness, and contrast adjustments before upload.
   - Admin action controls use consistent SVG icons with accessible labels and hover titles across content, profile, settings, inbox, and sign-out workflows.
+  - Vercel Web Analytics is integrated at the root layout for route-aware production page-view tracking.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.

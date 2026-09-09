@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
   title: { default: "Portfolio CMS", template: "%s · Portfolio CMS" },
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         {children}
+        <Analytics/>
       </body>
     </html>
   );
