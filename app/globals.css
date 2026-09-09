@@ -194,18 +194,19 @@ legend { padding: 0 8px; color: #c8d5d0; font-size: 12px; font-weight: 650; }
 .timeline-index { padding-top: 4px; color: #66766f; font-size: 10px; }
 .timeline h2, .project-card h2, .simple-grid h2, .skill-groups h2 { margin: 0 0 8px; font-size: 22px; letter-spacing: -.035em; }
 .timeline p { margin: 0 0 8px; }
-.project-grid, .simple-grid, .skill-groups { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 22px; margin-top: 40px; }
-.project-card { overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); box-shadow: var(--shadow); transition: transform .35s ease, border-color .35s ease; }
+.project-grid, .simple-grid, .skill-groups { display: grid; min-width: 0; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 22px; margin-top: 40px; }
+.project-card { overflow: hidden; min-width: 0; max-width: 100%; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); box-shadow: var(--shadow); transition: transform .35s ease, border-color .35s ease; }
 .project-card:hover { border-color: var(--line-bright); transform: translateY(-8px); }
 .project-card img, .project-placeholder { width: 100%; height: 285px; object-fit: cover; transition: transform .5s ease, filter .5s ease; }
 .project-card:hover img { transform: scale(1.025); filter: saturate(1.1); }
 .project-placeholder { display: grid; place-items: center; color: var(--accent-bright); background: radial-gradient(circle at 70% 25%,color-mix(in srgb,var(--accent) 25%,transparent),transparent 35%), linear-gradient(145deg,#101817,#080d0c); font-size: 70px; font-weight: 200; }
-.project-card > div:last-child { padding: 25px; }
+.project-card > div:last-child { min-width: 0; padding: 25px; }
 .project-card h2 a { text-decoration-color: transparent; text-underline-offset: 6px; transition: text-decoration-color .2s ease; }
 .project-card h2 a:hover { text-decoration-color: var(--accent-bright); }
+.project-card p, .project-card a { overflow-wrap: anywhere; word-break: break-word; }
 .project-card p { color: var(--muted); line-height: 1.65; }
-.card-meta { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
-.card-meta p { margin: 0 0 13px; }
+.card-meta { display: flex; min-width: 0; align-items: flex-start; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+.card-meta p { min-width: 0; margin: 0 0 13px; }
 .card-meta span { color: var(--accent-bright); font-size: 20px; }
 .simple-grid article, .skill-groups article { position: relative; overflow: hidden; min-height: 190px; padding: 25px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface-soft); transition: border-color .25s ease, transform .25s ease; }
 .simple-grid article:hover, .skill-groups article:hover { border-color: var(--line-bright); transform: translateY(-4px); }
@@ -215,8 +216,13 @@ legend { padding: 0 8px; color: #c8d5d0; font-size: 12px; font-weight: 650; }
 .form-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .contact-email { display: inline-flex; margin-top: 24px; color: var(--accent-bright); font-size: clamp(18px,3vw,25px); text-underline-offset: 6px; }
 .socials { display: grid; gap: 9px; }
-.socials a { display: flex; justify-content: space-between; max-width: 300px; padding: 9px 0; border-bottom: 1px solid var(--line); color: var(--muted); text-decoration: none; transition: color .2s ease, padding .2s ease; }
+.socials a { display: flex; align-items: center; justify-content: space-between; gap: 14px; max-width: 320px; padding: 9px 0; border-bottom: 1px solid var(--line); color: var(--muted); text-decoration: none; transition: color .2s ease, padding .2s ease; }
 .socials a:hover { padding-left: 6px; color: var(--text); }
+.social-name, .social-logo-preview { display: flex; min-width: 0; align-items: center; gap: 10px; }
+.social-name > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.site-logo { position: relative; display: grid; width: 28px; height: 28px; flex: 0 0 auto; place-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; color: var(--accent-bright,var(--accent)); background: rgba(114,241,193,.07); font-size: 10px; font-weight: 800; }
+.site-logo i { position: absolute; inset: 4px; background-position: center; background-repeat: no-repeat; background-size: contain; }
+.social-logo-preview { margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 450; }
 .honeypot { position: absolute; left: -10000px; }
 .site-footer { padding: 35px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
 .site-footer .container { display: flex; justify-content: space-between; gap: 20px; }

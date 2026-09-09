@@ -7,6 +7,7 @@ implemented:
   - Fresh-install, deployment, development, contribution, scope, architecture, and API documentation.
   - Futuristic glass interface with responsive admin navigation, modal content editors, toast feedback, subtle motion, and reduced-motion support.
   - Header inbox with unread count, responsive mail-style message filters and reply flow, and category selection for skills.
+  - Project cards contain long content on narrow screens, and social links show automatically resolved site favicons with an initial fallback.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
@@ -18,6 +19,7 @@ checks:
   - ESLint, focused Node tests, Worker dry-run bundle, and optimized Next.js production build pass.
   - End-to-end smoke covers singleton setup, PBKDF2 login, session cookie, uploads, CRUD, ordering, hidden media, section visibility, contact inbox, rendered pages, and logout.
   - Desktop and mobile visual checks cover the inbox list, unread badge, message detail popup, reply action, and skill category selector.
+  - Full-page mobile portfolio and desktop social-link editor checks cover project containment and live logo preview.
 blockers:
   - Production needs the owner's D1 database ID/name, R2 bucket name, final frontend origin, and deployment credentials.
 next_action: Configure the supplied Cloudflare resources, apply remote migrations, deploy the Worker, then connect and verify Vercel.

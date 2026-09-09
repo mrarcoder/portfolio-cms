@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ContactForm from "./contact-form";
+import SiteLogo from "./site-logo";
 
 function Section({ id,title,children }) {
   return <section className="portfolio-section reveal" id={id}><div className="section-label"><span>{title}</span><i/></div>{children}</section>;
@@ -31,7 +32,7 @@ export default function Portfolio({ data }) {
         {enabled.education !== false && data.education.length > 0 && <Section id="education" title="Education"><div className="simple-grid">{data.education.map((item) => <article key={item.id}><p className="eyebrow"><Dates start={item.start_date} end={item.end_date}/></p><h2>{item.degree}</h2><p>{item.institution}{item.field && ` · ${item.field}`}</p></article>)}</div></Section>}
         {enabled.achievements !== false && data.achievements.length > 0 && <Section id="achievements" title="Achievements"><div className="simple-grid">{data.achievements.map((item) => <article key={item.id}><p className="eyebrow">{item.date}</p><h2>{item.title}</h2><p>{item.description}</p><p className="muted">{item.organization}</p></article>)}</div></Section>}
         {enabled.certifications !== false && data.certifications.length > 0 && <Section id="certifications" title="Certifications"><div className="simple-grid">{data.certifications.map((item) => <article key={item.id}><p className="eyebrow">Issued {item.issue_date}</p><h2>{item.name}</h2><p>{item.issuer}</p><div className="credential-links">{item.credential_url && <a href={item.credential_url}>View credential ↗</a>}{item.file_media_id && <a href={`/api/media/${item.file_media_id}`}>Download certificate ↓</a>}</div></article>)}</div></Section>}
-        {enabled.contact !== false && <Section id="contact" title="Contact"><div className="contact-grid"><div><h2 className="section-title">Let&apos;s build something that matters.</h2><p className="section-copy">Have a project, an opportunity, or simply a good idea? Send a message.</p>{p.public_email && <a className="contact-email" href={`mailto:${p.public_email}`}>{p.public_email} <span aria-hidden="true">↗</span></a>}<div className="socials">{data.socialLinks.map((item) => <a href={item.url} key={item.id}>{item.label}<span aria-hidden="true">↗</span></a>)}</div></div><ContactForm/></div></Section>}
+        {enabled.contact !== false && <Section id="contact" title="Contact"><div className="contact-grid"><div><h2 className="section-title">Let&apos;s build something that matters.</h2><p className="section-copy">Have a project, an opportunity, or simply a good idea? Send a message.</p>{p.public_email && <a className="contact-email" href={`mailto:${p.public_email}`}>{p.public_email} <span aria-hidden="true">↗</span></a>}<div className="socials">{data.socialLinks.map((item) => <a href={item.url} key={item.id}><span className="social-name"><SiteLogo url={item.url} label={item.label}/><span>{item.label}</span></span><span aria-hidden="true">↗</span></a>)}</div></div><ContactForm/></div></Section>}
       </div>
     </main>
     <footer className="site-footer"><div className="container"><span>© {new Date().getFullYear()} {p.name || s.site_name || "Portfolio"}</span><a href="#top">Back to top ↑</a></div></footer>
