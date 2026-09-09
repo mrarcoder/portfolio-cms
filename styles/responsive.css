@@ -30,6 +30,8 @@
   .row-actions { width: 100%; }
   .editor-form, .form-two { grid-template-columns: 1fr; }
   .editor-form .field { grid-column: 1; }
+  .photo-editor-layout { grid-template-columns: 1fr; }
+  .photo-crop-stage { width: min(100%,320px); }
   .modal-backdrop { padding: 10px; }
   .modal-card { max-height: 94vh; padding: 20px; border-radius: 20px; }
   .modal-head { top: -20px; margin: -20px -20px 0; padding: 20px; }
@@ -72,6 +74,10 @@
   .row-copy { align-items: flex-start; }
   .row-index { display: none; }
   .row-actions button { flex: 1; }
+  .profile-photo-card { align-items: flex-start; flex-direction: column; }
+  .profile-photo-preview { width: 128px; height: 160px; }
+  .profile-photo-actions .secondary-button { flex: 1; }
+  .photo-editor-actions { align-items: stretch; flex-direction: column-reverse; }
   .portrait, .portrait-placeholder { height: 420px; }
   .toast { right: 16px; bottom: 16px; }
   .header-actions .header-action:last-child { display: none; }

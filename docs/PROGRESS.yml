@@ -13,6 +13,7 @@ implemented:
   - AI references, specifications, workflows, progress, and contributor guidance are indexed under docs/.
   - Public navigation is generated from the same visibility and content conditions as every rendered portfolio section, including responsive access on mobile.
   - Root hydration tolerates browser-extension attributes on the html element while preserving mismatch checks inside the application tree.
+  - The admin profile editor shows the active portrait and supports full viewing, replacement, 4:5 cropping, zoom, position, rotation, brightness, and contrast adjustments before upload.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
@@ -28,6 +29,7 @@ checks:
   - Fresh-state production smoke verifies all 18 concrete page routes, the API proxy, every content resource, metadata routes, authentication, media, inbox, and the not-found boundary after restructuring.
   - Documentation YAML parses and every docs/AGENTS.yml file reference resolves after the documentation move.
   - Fresh-state smoke asserts that each enabled portfolio navigation link has a rendered target and disabled sections are omitted.
+  - Desktop and narrow-screen browser checks cover the current-photo card, full preview, crop controls, adjusted WebP export, upload, profile update, replaced-file cleanup, and active-image reload.
 blockers:
   - Production needs the owner's D1 database ID/name, R2 bucket name, final frontend origin, and deployment credentials.
 next_action: Configure the supplied Cloudflare resources, apply remote migrations, deploy the Worker, then connect and verify Vercel.
