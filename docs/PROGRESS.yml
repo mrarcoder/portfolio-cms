@@ -12,6 +12,7 @@ implemented:
   - Frontend code is organized by admin, auth, portfolio, and shared UI domains; helper and stylesheet folders follow the same boundaries.
   - AI references, specifications, workflows, progress, and contributor guidance are indexed under docs/.
   - Public navigation is generated from the same visibility and content conditions as every rendered portfolio section, including responsive access on mobile.
+  - Root hydration tolerates browser-extension attributes on the html element while preserving mismatch checks inside the application tree.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
