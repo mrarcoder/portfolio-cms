@@ -4,11 +4,11 @@
   "main": "src/index.js",
   "compatibility_date": "2026-09-06",
   "workers_dev": true,
-  "vars": { "FRONTEND_ORIGIN": "http://127.0.0.1:3000" },
+  "vars": { "FRONTEND_ORIGIN": "https://portfolio-cms-rho-woad.vercel.app" },
   "d1_databases": [{
     "binding": "DB",
     "database_name": "portfolio-cms",
-    "database_id": "00000000-0000-0000-0000-000000000000",
+    "database_id": "8f637e26-9084-4711-a7f2-6d35198acf87",
     "migrations_dir": "../database/migrations"
   }],
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "portfolio-cms-media" }]

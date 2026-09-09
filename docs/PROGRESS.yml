@@ -1,5 +1,5 @@
-status: local_v1_complete
-current_phase: 6
+status: production_deployed_awaiting_owner_setup
+current_phase: 7
 implemented:
   - Next.js public portfolio, project details, setup/login, protected admin, same-origin API proxy, metadata, sitemap, and robots.
   - Cloudflare Worker authentication, content API, D1 persistence, R2 media validation/serving, contact limits, and inbox.
@@ -20,6 +20,8 @@ completed:
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
   - Implemented all six local roadmap phases without adding deferred features.
   - Rehearsed setup and every main workflow against a fresh isolated D1 and R2 state through the Next.js proxy.
+  - Provisioned production D1 portfolio-cms and private R2 portfolio-cms-media, applied all migrations, configured Worker secrets, and deployed portfolio-cms-api.
+  - Created the Vercel portfolio-cms project, configured WORKER_API_URL, and deployed the production frontend at https://portfolio-cms-rho-woad.vercel.app.
 checks:
   - All project YAML files parse successfully.
   - Every file reference in docs/AGENTS.yml resolves.
@@ -32,9 +34,11 @@ checks:
   - Fresh-state smoke asserts that each enabled portfolio navigation link has a rendered target and disabled sections are omitted.
   - Desktop and narrow-screen browser checks cover the current-photo card, full preview, crop controls, adjusted WebP export, upload, profile update, replaced-file cleanup, and active-image reload.
   - Admin icon controls pass lint/build checks and desktop browser inspection across content editing, profile actions, inbox actions, and sidebar sign-out.
+  - Production Worker health, Vercel deployment readiness, same-origin /api/health proxying, public/setup/login routes, and incomplete first-owner setup state are verified.
 blockers:
-  - Production needs the owner's D1 database ID/name, R2 bucket name, final frontend origin, and deployment credentials.
-next_action: Configure the supplied Cloudflare resources, apply remote migrations, deploy the Worker, then connect and verify Vercel.
+  - The owner must choose the production administrator username and password through /setup.
+  - The Vercel account must authorize the GitHub repository before automatic deployments from main can be enabled; CLI deployment remains available.
+next_action: Complete first-owner setup, delete the one-time SETUP_TOKEN, connect GitHub in Vercel, and verify authenticated production workflows.
 decisions:
   - One Next.js application and one Worker; no monorepo packages.
   - One theme; no blog, theme ecosystem, or import/export in V1.
