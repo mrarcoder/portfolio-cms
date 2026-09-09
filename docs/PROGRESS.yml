@@ -22,7 +22,7 @@ completed:
   - Implemented all six local roadmap phases without adding deferred features.
   - Rehearsed setup and every main workflow against a fresh isolated D1 and R2 state through the Next.js proxy.
   - Provisioned production D1 portfolio-cms and private R2 portfolio-cms-media, applied all migrations, configured Worker secrets, and deployed portfolio-cms-api.
-  - Created the Vercel portfolio-cms project, configured WORKER_API_URL, and deployed the production frontend at https://portfolio-cms-rho-woad.vercel.app.
+  - Created the Vercel mrarcoder project, configured WORKER_API_URL, and deployed the production frontend at https://mrarcoder.vercel.app.
 checks:
   - All project YAML files parse successfully.
   - Every file reference in docs/AGENTS.yml resolves.

@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "compatibility_date": "2026-09-06",
   "workers_dev": true,
-  "vars": { "FRONTEND_ORIGIN": "https://portfolio-cms-rho-woad.vercel.app" },
+  "vars": { "FRONTEND_ORIGIN": "https://mrarcoder.vercel.app" },
   "d1_databases": [{
     "binding": "DB",
     "database_name": "portfolio-cms",
