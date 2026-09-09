@@ -92,14 +92,15 @@ h1 { margin: 22px 0; font-size: clamp(42px, 6vw, 74px); font-weight: 620; line-h
 .overview-banner h2 { margin-top: 10px; font-size: 24px; }
 .overview-banner p:last-child { max-width: 630px; margin-bottom: 0; }
 
-.content-list { display: grid; gap: 12px; margin-top: 28px; }
-.content-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 19px 21px; transition: border-color .22s ease, transform .22s ease, background .22s ease; animation: card-in .4s ease both; }
+.content-list { display: grid; min-width: 0; max-width: 100%; gap: 12px; margin-top: 28px; }
+.content-row { display: flex; min-width: 0; max-width: 100%; align-items: center; justify-content: space-between; gap: 24px; padding: 19px 21px; transition: border-color .22s ease, transform .22s ease, background .22s ease; animation: card-in .4s ease both; }
 .content-row:hover { border-color: rgba(255,255,255,.18); transform: translateY(-2px); background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.03)); }
-.row-copy { display: flex; min-width: 0; align-items: center; gap: 16px; }
+.row-copy { display: flex; min-width: 0; max-width: 100%; flex: 1 1 auto; align-items: center; gap: 16px; }
+.row-copy > div { min-width: 0; max-width: 100%; }
 .row-index { color: #52635d; font-size: 10px; letter-spacing: .12em; }
-.content-row h2, .message h2 { margin: 0; font-size: 16px; }
+.content-row h2, .message h2 { margin: 0; overflow-wrap: anywhere; font-size: 16px; }
 .content-row p { overflow: hidden; margin: 5px 0 0; text-overflow: ellipsis; white-space: nowrap; }
-.row-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+.row-actions { display: flex; min-width: 0; max-width: 100%; flex: 0 1 auto; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 7px; }
 .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: rgba(255,255,255,.035); font-size: 10px; font-weight: 700; text-transform: uppercase; }
 .pill i { width: 5px; height: 5px; border-radius: 50%; background: #65726e; }
 .pill.visible { border-color: rgba(114,241,193,.22); color: var(--accent); background: rgba(114,241,193,.07); }
@@ -284,6 +285,8 @@ legend { padding: 0 8px; color: #c8d5d0; font-size: 12px; font-weight: 650; }
 
 @media (max-width: 1000px) {
   .admin-panels { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .content-row { align-items: flex-start; flex-direction: column; gap: 17px; }
+  .row-actions { width: 100%; justify-content: flex-start; }
   .public-hero { grid-template-columns: 1fr .72fr; gap: 45px; }
   .portrait-chip { right: -10px; }
   .mail-toolbar { grid-template-columns: 1fr 1fr 1fr; }

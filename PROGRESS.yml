@@ -8,6 +8,7 @@ implemented:
   - Futuristic glass interface with responsive admin navigation, modal content editors, toast feedback, subtle motion, and reduced-motion support.
   - Header inbox with unread count, responsive mail-style message filters and reply flow, and category selection for skills.
   - Project cards contain long content on narrow screens, and social links show automatically resolved site favicons with an initial fallback.
+  - Admin content cards use shrink-safe text and action regions, with stacked project rows at constrained dashboard widths.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
