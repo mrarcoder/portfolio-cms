@@ -1,21 +1,21 @@
 project: Portfolio CMS
 purpose: Build the accepted small portfolio CMS; keep scope and implementation simple.
-read_first: [AGENTS.yml, SCOPE.yml, PROGRESS.yml]
+read_first: [docs/AGENTS.yml, docs/SCOPE.yml, docs/PROGRESS.yml]
 read_when_needed:
-  architecture_or_setup: ARCHITECTURE.yml
-  database_api_or_security: DATA_API.yml
-  implementation_order: ROADMAP.yml
+  architecture_or_setup: docs/ARCHITECTURE.yml
+  database_api_or_security: docs/DATA_API.yml
+  implementation_order: docs/ROADMAP.yml
 authority:
   - Follow current user instructions and applicable environment instructions first.
   - These files capture the accepted scope; earlier shared-chat proposals are superseded.
   - Do not expand scope without a new user request.
 workflow:
-  - Inspect existing code and PROGRESS.yml before editing.
+  - Inspect existing code and docs/PROGRESS.yml before editing.
   - Read only the additional specification relevant to the task.
   - Briefly state the change and its verification, then implement it.
   - Finish working vertical slices; do not substitute mock data for persistence.
   - Run relevant checks, fix failures, and report actual results.
-  - Update PROGRESS.yml with completed work, checks, blockers, and next action.
+  - Update docs/PROGRESS.yml with completed work, checks, blockers, and next action.
   - Update the relevant specification when the user changes a decision.
 rules:
   language: JavaScript only; use .js and .jsx, no TypeScript source or configuration.

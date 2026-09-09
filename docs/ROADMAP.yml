@@ -1,4 +1,4 @@
-principle: Build usable vertical slices in order; every phase stays within SCOPE.yml.
+principle: Build usable vertical slices in order; every phase stays within docs/SCOPE.yml.
 phases:
   - id: 1
     name: Foundation

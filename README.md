@@ -312,6 +312,7 @@ components/auth/           Setup and sign-in UI
 components/portfolio/      Public portfolio and contact UI
 components/ui/             UI shared across feature areas
 database/migrations/       Ordered D1 migrations
+docs/                      AI references and project documentation
 lib/admin/                 Admin resource definitions and payload helpers
 lib/auth/                  Browser-side password derivation
 lib/api.js                 Server-side Worker API client
@@ -322,7 +323,7 @@ worker/src/                Worker routing, auth, content, and media logic
 worker/wrangler.jsonc      Cloudflare bindings and deployment configuration
 ```
 
-The accepted V1 boundary is documented in [SCOPE.yml](SCOPE.yml). Implementation and security decisions are in [ARCHITECTURE.yml](ARCHITECTURE.yml) and [DATA_API.yml](DATA_API.yml). See [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes.
+The accepted V1 boundary is documented in [docs/SCOPE.yml](docs/SCOPE.yml). Implementation and security decisions are in [docs/ARCHITECTURE.yml](docs/ARCHITECTURE.yml) and [docs/DATA_API.yml](docs/DATA_API.yml). See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) before submitting changes.
 
 ## License
 
