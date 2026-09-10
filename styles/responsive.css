@@ -3,7 +3,6 @@
   .content-row { align-items: flex-start; flex-direction: column; gap: 17px; }
   .row-actions { width: 100%; justify-content: flex-start; }
   .public-hero { grid-template-columns: 1fr .72fr; gap: 45px; }
-  .portrait-chip { right: -10px; }
   .mail-toolbar { grid-template-columns: 1fr 1fr 1fr; }
   .mail-search { grid-column: 1/-1; }
 }
@@ -40,12 +39,11 @@
   .public-nav a { padding: 8px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-soft); }
   .public-nav .nav-cta { padding: 8px 10px; }
   .portfolio-section { scroll-margin-top: 135px; }
-  .public-hero { min-height: auto; grid-template-columns: 1fr; padding-block: 62px 85px; }
+  .public-hero { min-height: auto; grid-template-columns: 1fr; padding-block: 52px 62px; }
   .public-hero h1 { font-size: clamp(50px,15vw,78px); }
   .portrait-frame { width: min(92%,480px); margin-inline: auto; }
   .portrait, .portrait-placeholder { height: 520px; min-height: 0; }
-  .portrait-chip { right: -8px; bottom: 25px; }
-  .portfolio-section { padding-block: 75px; }
+  .portfolio-section { padding-block: 54px; }
   .timeline article, .contact-grid, .project-body { grid-template-columns: 1fr; gap: 18px; }
   .timeline article { padding-block: 26px; }
   .timeline-index { display: none; }
@@ -88,4 +86,5 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .portfolio-section.reveal, .hero-name, .hero-title, .hero-copy .lede, .hero-copy .hero-actions { animation: none !important; }
 }

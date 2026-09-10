@@ -18,6 +18,7 @@ implemented:
   - Vercel Web Analytics is integrated at the root layout for route-aware production page-view tracking.
   - An unlisted authenticated admin route provides username and password changes with current-password confirmation and session rotation.
   - Credential inputs use a consistent single-column layout, and every password field has an accessible show/hide control.
+  - Public portfolio spacing, color balance, typography, cards, hover states, and lightweight text/section motion were refined; unclear decorative hero labels were removed.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
@@ -39,6 +40,7 @@ checks:
   - Admin icon controls pass lint/build checks and desktop browser inspection across content editing, profile actions, inbox actions, and sidebar sign-out.
   - Production Worker health, Vercel deployment readiness, same-origin /api/health proxying, public/setup/login routes, and incomplete first-owner setup state are verified.
   - Account-change tests cover wrong-password rejection, username/password persistence, old-session revocation, replacement-session access, new login credentials, and origin checks.
+  - Desktop and mobile browser renders with production content verify the tighter section rhythm, responsive hero, readable contrast, and removal of decorative hero labels.
 blockers:
   - The owner must choose the production administrator username and password through /setup.
   - The Vercel account must authorize the GitHub repository before automatic deployments from main can be enabled; CLI deployment remains available.
