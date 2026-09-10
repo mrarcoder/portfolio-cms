@@ -37,9 +37,6 @@ export default function Portfolio({ data }) {
     ["skills", "Skills"], ["education", "Education"], ["achievements", "Achievements"],
     ["certifications", "Certifications"], ["contact", "Contact"],
   ].filter(([id]) => sections[id]);
-  const metrics = [
-    [data.experiences.length, "Roles"], [data.projects.length, "Projects"], [data.skills.length, "Skills"],
-  ].filter(([value]) => value > 0);
   const jsonLd = { "@context": "https://schema.org", "@type": "Person", name: p.name, jobTitle: p.title, url: s.site_url || undefined, email: p.public_email || undefined };
   const initials = (p.name || s.site_name || "P").split(" ").map((word) => word[0]).slice(0, 2).join("");
   let sectionNumber = 0;
@@ -69,7 +66,6 @@ export default function Portfolio({ data }) {
                 {enabled.contact !== false && <a className="button no-margin" href="#contact">Start a conversation <span aria-hidden="true">↗</span></a>}
                 {p.resume_media_id && <a className="secondary-link" href={`/api/media/${p.resume_media_id}`}>Download résumé <span aria-hidden="true">↓</span></a>}
               </div>
-              {metrics.length > 0 && <div className="hero-metrics" aria-label="Portfolio overview">{metrics.map(([value, label]) => <div key={label}><strong>{String(value).padStart(2, "0")}</strong><span>{label}</span></div>)}</div>}
             </div>
             <div className="portrait-frame">
               <div className="portrait-toolbar" aria-hidden="true"><span /><span /><span /><small>profile.preview</small></div>

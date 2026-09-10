@@ -19,7 +19,8 @@ implemented:
   - An unlisted authenticated admin route provides username and password changes with current-password confirmation and session rotation.
   - Credential inputs use a consistent single-column layout, and every password field has an accessible show/hide control.
   - Public portfolio spacing, color balance, typography, cards, hover states, and lightweight text/section motion were refined; unclear decorative hero labels were removed.
-  - The public portfolio now uses a lighter navy glass system with a modular hero, live content metrics, framed portrait, compact editorial panels, skill chips, richer project and experience cards, animated ambient backgrounds, and scroll-linked transitions.
+  - The public portfolio now uses a lighter navy glass system with a modular hero, framed portrait, compact editorial panels, skill chips, richer project and experience cards, animated ambient backgrounds, and scroll-linked transitions.
+  - Hero content counters were removed; interaction polish now includes a scroll-aware hero exit, drifting background grid, animated panel accents, card light sweeps, portrait depth, button icon motion, and clearer keyboard focus states.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.

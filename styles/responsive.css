@@ -45,7 +45,6 @@
   .hero-panel { grid-template-columns: 1fr; gap: 34px; padding: 32px 25px 25px; border-radius: 28px; }
   .public-hero h1 { font-size: clamp(49px,14vw,78px); }
   .hero-title { font-size: .54em; }
-  .hero-metrics { margin-top: 34px; }
   .portrait-frame { width: min(100%,470px); margin-inline: auto; }
   .portrait, .portrait-placeholder { height: min(112vw,510px); min-height: 0; }
   .scroll-cue { margin-top: 16px; }
@@ -87,7 +86,6 @@
   .hero-panel { padding-inline: 20px; }
   .portrait, .portrait-placeholder { height: min(116vw,440px); }
   .hero-actions { align-items: flex-start; flex-direction: column; }
-  .hero-metrics { gap: 24px; }
   .section-title, .contact-grid .section-title { font-size: clamp(32px,10vw,44px); }
   .site-footer .container { align-items: flex-start; flex-direction: column; }
   .toast { right: 16px; bottom: 16px; }
@@ -100,5 +98,5 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .portfolio-section.reveal, .scroll-progress, .hero-panel::before, .scan-line, .availability i, .portrait-status i, .footer-status i, .scroll-cue i, .hero-name, .hero-title, .hero-copy .lede, .hero-copy .hero-actions, .hero-metrics { animation: none !important; }
+  .portfolio-section.reveal, .scroll-progress, .portfolio-shell::after, .hero-panel, .hero-panel::before, .scan-line, .availability i, .portrait-status i, .footer-status i, .scroll-cue i, .hero-name, .hero-title, .hero-copy .lede, .hero-copy .hero-actions { animation: none !important; }
 }
