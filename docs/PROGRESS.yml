@@ -19,6 +19,7 @@ implemented:
   - An unlisted authenticated admin route provides username and password changes with current-password confirmation and session rotation.
   - Credential inputs use a consistent single-column layout, and every password field has an accessible show/hide control.
   - Public portfolio spacing, color balance, typography, cards, hover states, and lightweight text/section motion were refined; unclear decorative hero labels were removed.
+  - The public portfolio now uses a lighter navy glass system with a modular hero, live content metrics, framed portrait, compact editorial panels, skill chips, richer project and experience cards, animated ambient backgrounds, and scroll-linked transitions.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
@@ -41,6 +42,7 @@ checks:
   - Production Worker health, Vercel deployment readiness, same-origin /api/health proxying, public/setup/login routes, and incomplete first-owner setup state are verified.
   - Account-change tests cover wrong-password rejection, username/password persistence, old-session revocation, replacement-session access, new login credentials, and origin checks.
   - Desktop and mobile browser renders with production content verify the tighter section rhythm, responsive hero, readable contrast, and removal of decorative hero labels.
+  - Lint, Node tests, optimized production build, and desktop/mobile browser renders pass after the full public portfolio redesign; the 390px layout remains contained and honors reduced-motion preferences.
 blockers:
   - The owner must choose the production administrator username and password through /setup.
   - The Vercel account must authorize the GitHub repository before automatic deployments from main can be enabled; CLI deployment remains available.

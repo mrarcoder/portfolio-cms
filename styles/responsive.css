@@ -2,7 +2,8 @@
   .admin-panels { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .content-row { align-items: flex-start; flex-direction: column; gap: 17px; }
   .row-actions { width: 100%; justify-content: flex-start; }
-  .public-hero { grid-template-columns: 1fr .72fr; gap: 45px; }
+  .hero-panel { grid-template-columns: minmax(0,1fr) minmax(275px,.7fr); gap: 38px; }
+  .timeline article { grid-template-columns: 32px minmax(160px,.65fr) minmax(240px,1fr); gap: 20px; }
   .mail-toolbar { grid-template-columns: 1fr 1fr 1fr; }
   .mail-search { grid-column: 1/-1; }
 }
@@ -34,18 +35,26 @@
   .modal-backdrop { padding: 10px; }
   .modal-card { max-height: 94vh; padding: 20px; border-radius: 20px; }
   .modal-head { top: -20px; margin: -20px -20px 0; padding: 20px; }
-  .portfolio-shell .public-header .header-inner { flex-wrap: wrap; gap: 10px; padding-block: 12px 10px; }
+  .portfolio-shell .public-header { padding-top: 9px; }
+  .portfolio-shell .public-header .header-inner { flex-wrap: wrap; gap: 9px; padding: 11px 13px 9px; border-radius: 15px; }
   .public-nav { order: 3; width: 100%; gap: 7px; padding-bottom: 2px; }
   .public-nav a { padding: 8px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-soft); }
   .public-nav .nav-cta { padding: 8px 10px; }
   .portfolio-section { scroll-margin-top: 135px; }
-  .public-hero { min-height: auto; grid-template-columns: 1fr; padding-block: 52px 62px; }
-  .public-hero h1 { font-size: clamp(50px,15vw,78px); }
-  .portrait-frame { width: min(92%,480px); margin-inline: auto; }
-  .portrait, .portrait-placeholder { height: 520px; min-height: 0; }
-  .portfolio-section { padding-block: 54px; }
-  .timeline article, .contact-grid, .project-body { grid-template-columns: 1fr; gap: 18px; }
-  .timeline article { padding-block: 26px; }
+  .public-hero { min-height: auto; padding-block: 25px 18px; }
+  .hero-panel { grid-template-columns: 1fr; gap: 34px; padding: 32px 25px 25px; border-radius: 28px; }
+  .public-hero h1 { font-size: clamp(49px,14vw,78px); }
+  .hero-title { font-size: .54em; }
+  .hero-metrics { margin-top: 34px; }
+  .portrait-frame { width: min(100%,470px); margin-inline: auto; }
+  .portrait, .portrait-placeholder { height: min(112vw,510px); min-height: 0; }
+  .scroll-cue { margin-top: 16px; }
+  .portfolio-content { padding-top: 18px; }
+  .portfolio-section { padding: 27px 23px; }
+  .section-heading { display: grid; gap: 15px; margin-bottom: 30px; }
+  .section-intro { max-width: 100%; text-align: left; }
+  .about-layout, .timeline article, .contact-grid, .project-body { grid-template-columns: 1fr; gap: 22px; }
+  .timeline article { padding: 22px; }
   .timeline-index { display: none; }
   .project-grid, .simple-grid, .skill-groups { grid-template-columns: 1fr; }
   .project-card img, .project-placeholder { height: 230px; }
@@ -75,7 +84,12 @@
   .profile-photo-card { align-items: flex-start; flex-direction: column; }
   .profile-photo-preview { width: 128px; height: 160px; }
   .profile-photo-actions .secondary-button { flex: 0 0 38px; }
-  .portrait, .portrait-placeholder { height: 420px; }
+  .hero-panel { padding-inline: 20px; }
+  .portrait, .portrait-placeholder { height: min(116vw,440px); }
+  .hero-actions { align-items: flex-start; flex-direction: column; }
+  .hero-metrics { gap: 24px; }
+  .section-title, .contact-grid .section-title { font-size: clamp(32px,10vw,44px); }
+  .site-footer .container { align-items: flex-start; flex-direction: column; }
   .toast { right: 16px; bottom: 16px; }
   .header-actions .header-action:last-child { display: none; }
   .mail-filter { grid-column: span 1; }
@@ -86,5 +100,5 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .portfolio-section.reveal, .hero-name, .hero-title, .hero-copy .lede, .hero-copy .hero-actions { animation: none !important; }
+  .portfolio-section.reveal, .scroll-progress, .hero-panel::before, .scan-line, .availability i, .portrait-status i, .footer-status i, .scroll-cue i, .hero-name, .hero-title, .hero-copy .lede, .hero-copy .hero-actions, .hero-metrics { animation: none !important; }
 }
