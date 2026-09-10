@@ -71,11 +71,48 @@ test("login sessions protect the current-user endpoint and can be revoked", asyn
   } finally { env.database.close(); }
 });
 
-test("setup and login mutations reject untrusted origins", async () => {
+test("administrator can change username and password after confirming the current password", async () => {
   const env = createEnvironment();
   try {
-    const response = await worker.fetch(request("/api/setup", { method: "POST", headers: { Origin: "https://attacker.test" }, body: "{}" }), env);
+    const oldSalt = createSalt();
+    const oldVerifier = await createPasswordVerifier("a reliable long password", oldSalt);
+    await worker.fetch(request("/api/setup", { method:"POST",body:JSON.stringify({ siteName:"My portfolio",setupToken:env.SETUP_TOKEN,username:"owner",salt:oldSalt,passwordVerifier:oldVerifier }) }), env);
+
+    let response = await worker.fetch(request("/api/auth/login", { method:"POST",body:JSON.stringify({ username:"owner",passwordVerifier:oldVerifier }) }), env);
+    const firstCookie = response.headers.get("Set-Cookie").split(";")[0];
+    response = await worker.fetch(request("/api/auth/login", { method:"POST",body:JSON.stringify({ username:"owner",passwordVerifier:oldVerifier }) }), env);
+    const secondCookie = response.headers.get("Set-Cookie").split(";")[0];
+
+    const wrongVerifier = await createPasswordVerifier("the wrong long password", oldSalt);
+    response = await worker.fetch(request("/api/admin/account", { method:"PUT",headers:{ Cookie:firstCookie },body:JSON.stringify({ username:"new-owner",currentPasswordVerifier:wrongVerifier }) }), env);
+    assert.equal(response.status, 401);
+    assert.equal(env.database.prepare("SELECT username FROM users WHERE id = 1").get().username, "owner");
+
+    const newSalt = createSalt();
+    const newVerifier = await createPasswordVerifier("a different reliable password", newSalt);
+    response = await worker.fetch(request("/api/admin/account", { method:"PUT",headers:{ Cookie:firstCookie },body:JSON.stringify({ username:"new-owner",currentPasswordVerifier:oldVerifier,newSalt,newPasswordVerifier:newVerifier }) }), env);
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { success:true,data:{ user:{ id:1,username:"new-owner" } } });
+    const replacementCookie = response.headers.get("Set-Cookie").split(";")[0];
+
+    response = await worker.fetch(new Request("https://api.test/api/auth/me", { headers:{ Cookie:secondCookie } }), env);
+    assert.equal(response.status, 401);
+    response = await worker.fetch(new Request("https://api.test/api/auth/me", { headers:{ Cookie:replacementCookie } }), env);
+    assert.deepEqual(await response.json(), { success:true,data:{ user:{ id:1,username:"new-owner" } } });
+    response = await worker.fetch(request("/api/auth/login", { method:"POST",body:JSON.stringify({ username:"owner",passwordVerifier:oldVerifier }) }), env);
+    assert.equal(response.status, 401);
+    response = await worker.fetch(request("/api/auth/login", { method:"POST",body:JSON.stringify({ username:"new-owner",passwordVerifier:newVerifier }) }), env);
+    assert.equal(response.status, 200);
+  } finally { env.database.close(); }
+});
+
+test("setup and account mutations reject untrusted origins", async () => {
+  const env = createEnvironment();
+  try {
+    let response = await worker.fetch(request("/api/setup", { method: "POST", headers: { Origin: "https://attacker.test" }, body: "{}" }), env);
     assert.equal(response.status, 403);
     assert.equal(env.database.prepare("SELECT COUNT(*) AS count FROM users").get().count, 0);
+    response = await worker.fetch(request("/api/admin/account", { method:"PUT",headers:{ Origin:"https://attacker.test" },body:"{}" }), env);
+    assert.equal(response.status, 403);
   } finally { env.database.close(); }
 });

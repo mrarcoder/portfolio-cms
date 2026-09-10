@@ -21,6 +21,7 @@ public_design:
   principle: Do not create a separate page for every section unless it improves the agreed experience.
 admin_design:
   navigation: [Overview, Profile, Experience, Education, Skills, Projects, Achievements, Certifications, Messages, Settings]
+  account: Change the singleton administrator username or password from Settings after confirming the current password.
   social_links: Manage under profile or settings.
   dashboard: Simple useful counts; no analytics or activity-history system.
 deferred:

@@ -46,6 +46,8 @@
 
 .editor-form { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; margin-top: 25px; }
 .profile-editor, .settings-editor { margin-top: 28px; }
+.settings-section { margin-top: 38px; }
+.settings-section > div > h2 { margin: 5px 0 8px; font-size: clamp(20px,3vw,28px); }
 .field { display: grid; gap: 8px; color: #c8d5d0; font-size: 12px; font-weight: 650; letter-spacing: .01em; }
 .field input, .field textarea, .field select { width: 100%; min-height: 47px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; outline: none; color: var(--text); background: rgba(2,7,6,.52); font-weight: 430; transition: border-color .2s ease, background .2s ease, box-shadow .2s ease; }
 .field textarea { min-height: 124px; resize: vertical; line-height: 1.6; }

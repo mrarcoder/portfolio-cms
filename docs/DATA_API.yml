@@ -37,7 +37,7 @@ api:
     exception: File responses return bytes with appropriate headers.
   routes:
     setup: GET /setup/status; POST /setup with setup token and initial account/site/profile values.
-    auth: GET /auth/challenge; POST /auth/login; POST /auth/logout; GET /auth/me.
+    auth: GET /auth/challenge; POST /auth/login; POST /auth/logout; GET /auth/me; PUT /admin/account.
     public: GET /portfolio; GET /projects/:slug; GET /media/:id; POST /messages.
     admin_profile: GET and PUT /admin/profile.
     admin_summary: GET /admin/summary with small dashboard counts.
@@ -60,6 +60,7 @@ api:
     - Order changes must validate membership, duplicates, and missing IDs before atomic update.
 security:
   passwords: Browser derives a 600000-round PBKDF2-SHA-256 verifier from a random salt; Worker stores its HMAC-SHA-256 using AUTH_PEPPER. Production requires TLS because the verifier is the submitted credential.
+  account_changes: Require an authenticated session, trusted browser origin, and the current password; rotate all sessions when the password changes.
   limits: Apply login and contact-submission limits with persistent bounded counters; add a contact honeypot.
   validation: Allowlist fields; bound lengths, arrays, body sizes; validate dates, slugs, colors, emails, and URL schemes.
   text: Plain text content in V1; never render stored input as raw HTML.

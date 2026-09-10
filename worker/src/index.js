@@ -81,6 +81,36 @@ async function logout(request, env) {
   return json({ success: true, data: {} }, 200, { "Set-Cookie": await revokeSession(request, env) });
 }
 
+async function updateAccount(request, env) {
+  if (!requireBrowserOrigin(request, env)) return json({ success: false, error: "Invalid request origin" }, 403);
+  const sessionUser = await getSessionUser(request, env);
+  if (!sessionUser) return json({ success: false, error: "Authentication required" }, 401);
+  if (!isConfiguredPepper(env.AUTH_PEPPER)) return json({ success: false, error: "Account security is not configured" }, 503);
+
+  const body = await readJson(request, 1000);
+  const changesPassword = Boolean(body && (body.newPasswordVerifier || body.newSalt));
+  if (!body || !validUsername(body.username) || !validVerifier(body.currentPasswordVerifier)
+    || (changesPassword && (!validVerifier(body.newPasswordVerifier) || !validSalt(body.newSalt)))) {
+    return json({ success: false, error: "Invalid account details" }, 422);
+  }
+
+  const username = normalizeUsername(body.username);
+  if (username === sessionUser.username && !changesPassword) return json({ success: false, error: "No account changes to save" }, 422);
+  const user = await env.DB.prepare("SELECT password_hash FROM users WHERE id = ?").bind(sessionUser.id).first();
+  if (!user || !(await verifyPasswordVerifier(body.currentPasswordVerifier, user.password_hash, env.AUTH_PEPPER))) {
+    return json({ success: false, error: "Current password is incorrect" }, 401);
+  }
+
+  const passwordHash = changesPassword
+    ? await createPasswordRecord(body.newPasswordVerifier, body.newSalt, env.AUTH_PEPPER)
+    : user.password_hash;
+  const statements = [env.DB.prepare("UPDATE users SET username = ?, password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?").bind(username, passwordHash, sessionUser.id)];
+  if (changesPassword) statements.push(env.DB.prepare("DELETE FROM sessions WHERE user_id = ?").bind(sessionUser.id));
+  await env.DB.batch(statements);
+  const headers = changesPassword ? { "Set-Cookie": await createSession(request, env, sessionUser.id) } : {};
+  return json({ success: true, data: { user: { id: sessionUser.id, username } } }, 200, headers);
+}
+
 async function health(env) {
   try {
     await env.DB.prepare("SELECT id FROM users LIMIT 1").first();
@@ -103,6 +133,7 @@ const worker = {
     if(path==="/api/messages")return request.method==="POST"?submitMessage(request,env):methodNotAllowed(["POST"]);
     if(path==="/api/admin/profile")return profile(request,env);
     if(path==="/api/admin/settings")return settings(request,env);
+    if(path==="/api/admin/account")return request.method==="PUT"?updateAccount(request,env):methodNotAllowed(["PUT"]);
     if(path==="/api/admin/summary")return request.method==="GET"?adminSummary(request,env):methodNotAllowed(["GET"]);
     if(path==="/api/admin/media")return request.method==="POST"?uploadMedia(request,env):methodNotAllowed(["POST"]);
     const mediaMatch=path.match(/^\/api\/(?:admin\/)?media\/(\d+)$/);if(mediaMatch)return path.includes("/admin/")&&request.method==="DELETE"?deleteMedia(request,env,Number(mediaMatch[1])):request.method==="GET"?serveMedia(request,env,Number(mediaMatch[1])):methodNotAllowed(["GET","DELETE"]);
