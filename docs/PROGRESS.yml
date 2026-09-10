@@ -21,6 +21,7 @@ implemented:
   - Public portfolio spacing, color balance, typography, cards, hover states, and lightweight text/section motion were refined; unclear decorative hero labels were removed.
   - The public portfolio now uses a lighter navy glass system with a modular hero, framed portrait, compact editorial panels, skill chips, richer project and experience cards, animated ambient backgrounds, and scroll-linked transitions.
   - Hero content counters were removed; interaction polish now includes a scroll-aware hero exit, drifting background grid, animated panel accents, card light sweeps, portrait depth, button icon motion, and clearer keyboard focus states.
+  - Projects support optional validated MP4/WebM showcase uploads in the admin editor; public project cards play muted previews on hover or keyboard focus and provide an explicit touch-friendly preview control.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
@@ -44,6 +45,7 @@ checks:
   - Account-change tests cover wrong-password rejection, username/password persistence, old-session revocation, replacement-session access, new login credentials, and origin checks.
   - Desktop and mobile browser renders with production content verify the tighter section rhythm, responsive hero, readable contrast, and removal of decorative hero labels.
   - Lint, Node tests, optimized production build, and desktop/mobile browser renders pass after the full public portfolio redesign; the 390px layout remains contained and honors reduced-motion preferences.
+  - Project video smoke coverage verifies authenticated upload, project association, public visibility, portfolio serialization, and rendered preview markup.
 blockers:
   - The owner must choose the production administrator username and password through /setup.
   - The Vercel account must authorize the GitHub repository before automatic deployments from main can be enabled; CLI deployment remains available.

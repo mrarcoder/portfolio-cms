@@ -1,0 +1,2 @@
+ALTER TABLE projects
+ADD COLUMN video_media_id INTEGER REFERENCES media(id) ON DELETE SET NULL;

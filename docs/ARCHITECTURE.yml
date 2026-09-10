@@ -8,7 +8,7 @@ boundaries:
   next: Public rendering, admin/setup UI, API communication, metadata.
   worker: Sole authority for authentication, validation, authorization, content, SQL, and files.
   d1: Structured content, sessions, settings, file metadata, contact messages.
-  r2: Uploaded images and PDFs.
+  r2: Uploaded images, short project videos, and PDFs.
 structure:
   app/: Public routes, project details, admin routes, setup, metadata routes.
   components/admin/: Admin shell, content editors, inbox, profile, and settings UI.

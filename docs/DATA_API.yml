@@ -13,7 +13,7 @@ database:
     education: id, institution, degree, field, start_date, end_date nullable, description, sort_order, visible, timestamps
     skill_categories: id, name, sort_order, visible
     skills: id, category_id nullable, name, sort_order, visible, timestamps
-    projects: id, title, slug unique, summary, description, image_media_id, technologies_json, github_url, live_url, start_date, end_date nullable, progress, sort_order, visible, timestamps
+    projects: id, title, slug unique, summary, description, image_media_id, video_media_id, technologies_json, github_url, live_url, start_date, end_date nullable, progress, sort_order, visible, timestamps
     achievements: id, title, organization, date, description, url, sort_order, visible, timestamps
     certifications: id, name, issuer, issue_date, expiry_date nullable, credential_id, credential_url, file_media_id, sort_order, visible, timestamps
     social_links: id, label, url, sort_order, visible
@@ -65,7 +65,7 @@ security:
   validation: Allowlist fields; bound lengths, arrays, body sizes; validate dates, slugs, colors, emails, and URL schemes.
   text: Plain text content in V1; never render stored input as raw HTML.
   uploads:
-    - Accept only JPEG, PNG, WebP, and PDF; reject SVG, HTML, and executable content.
+    - Accept only JPEG, PNG, WebP, PDF, MP4, and WebM; reject SVG, HTML, and executable content.
     - Validate signatures, type, and actual byte count; generate storage keys server-side.
     - Start with a 3 MiB application limit and verify it against hosting/proxy limits.
     - Serve PDFs as downloads and all media with correct content types and nosniff.

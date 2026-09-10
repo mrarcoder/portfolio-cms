@@ -6,11 +6,11 @@ v1:
   setup: One-time owner setup, one admin account, basic site configuration.
   profile: Name, professional title, short/long bio, photo, location, contact details, resume PDF.
   career: Experience, education, categorized skills, achievements, certifications.
-  projects: Title, slug, descriptions, one image, technology names, GitHub/live URLs, dates, progress state.
+  projects: Title, slug, descriptions, one image, optional short showcase video, technology names, GitHub/live URLs, dates, progress state.
   content_controls: Create, edit, delete, show/hide, and reorder lists with up/down buttons.
   sections: Toggle public sections from settings; omit empty sections gracefully.
   appearance: One responsive dark glass theme with restrained motion, popup editors and notifications, primary color, and optional light mode.
-  media: Upload images/PDFs from relevant forms; no separate media-library interface.
+  media: Upload images, short project videos, and PDFs from relevant forms; no separate media-library interface.
   contact: Arbitrary social links, public contact form, admin inbox with read/delete actions.
   seo: Titles, descriptions, canonical URLs, social previews, sitemap, robots rules.
   quality: Responsive layouts, keyboard access, labels, visible focus, safe forms, useful error states.

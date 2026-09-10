@@ -52,13 +52,18 @@ const hiddenPng = new FormData();
 hiddenPng.append("file", new Blob([Uint8Array.from([0x89,0x50,0x4e,0x47,0,0,0,0])], { type: "image/png" }), "hidden.png");
 const hiddenImageId = ok(await api("/admin/media", { method: "POST", form: hiddenPng }), 201).id;
 
+const webm = new FormData();
+webm.append("file", new Blob([Uint8Array.from([0x1a,0x45,0xdf,0xa3])], { type: "video/webm" }), "preview.webm");
+webm.append("altText", "Project video preview");
+const videoId = ok(await api("/admin/media", { method: "POST", form: webm }), 201).id;
+
 ok(await api("/admin/profile", { method: "PUT", body: { name:"Ada Example", title:"Software Engineer", short_bio:"I build useful software.", long_bio:"A longer biography.", location:"Lahore", public_email:"ada@example.com", public_phone:"", photo_media_id:imageId, resume_media_id:null } }), 200);
 
 const experienceId = await create("experiences", { company:"Example Co",position:"Engineer",location:"Remote",start_date:"2024-01-01",end_date:"",is_current:true,description:"Built products.",visible:true });
 await create("education", { institution:"Example University",degree:"BS Computer Science",field:"Computer Science",start_date:"2020-01-01",end_date:"2023-12-01",description:"",visible:true });
 const categoryId = await create("skill-categories", { name:"Engineering",visible:true });
 await create("skills", { category_id:categoryId,name:"JavaScript",visible:true });
-const visibleProjectId = await create("projects", { title:"Visible project",slug:"visible-project",summary:"Public work",description:"Project details",image_media_id:imageId,technologies_json:["Next.js","Cloudflare"],github_url:"https://github.com/example/project",live_url:"",start_date:"2025-01-01",end_date:"",progress:"completed",visible:true });
+const visibleProjectId = await create("projects", { title:"Visible project",slug:"visible-project",summary:"Public work",description:"Project details",image_media_id:imageId,video_media_id:videoId,technologies_json:["Next.js","Cloudflare"],github_url:"https://github.com/example/project",live_url:"",start_date:"2025-01-01",end_date:"",progress:"completed",visible:true });
 const hiddenProjectId = await create("projects", { title:"Hidden project",slug:"hidden-project",summary:"Private draft",description:"Draft",image_media_id:hiddenImageId,technologies_json:[],github_url:"",live_url:"",start_date:"2026-01-01",end_date:"",progress:"in_progress",visible:false });
 await create("achievements", { title:"Award",organization:"Example",date:"2025-02-01",description:"An achievement",url:"https://example.com/award",visible:true });
 await create("certifications", { name:"Certificate",issuer:"Example",issue_date:"2025-03-01",expiry_date:"",credential_id:"ABC",credential_url:"https://example.com/certificate",file_media_id:null,visible:true });
@@ -67,12 +72,14 @@ await create("social-links", { label:"GitHub",url:"https://github.com/example",v
 ok(await api("/admin/projects/order", { method:"PUT", body:{ ids:[hiddenProjectId,visibleProjectId] } }), 200);
 assert.equal((await api(`/media/${hiddenImageId}`, { useCookie:false })).response.status, 404);
 assert.equal((await api(`/media/${imageId}`, { useCookie:false })).response.status, 200);
+assert.equal((await api(`/media/${videoId}`, { useCookie:false })).response.status, 200);
 
 ok(await api("/admin/settings", { method:"PUT", body:{ site_name:"Ada Portfolio",site_description:"A software portfolio",site_url:base,primary_color:"#315c4b",color_mode:"light",enabled_sections:{experience:true,education:true,skills:true,projects:true,achievements:false,certifications:true,contact:true},seo_title:"Ada Example",seo_description:"Ada's portfolio" } }), 200);
 const portfolio = ok(await api("/portfolio"), 200);
 assert.deepEqual(portfolio.projects.map((item) => item.slug), ["visible-project"]);
 assert.equal(portfolio.achievements.length, 0);
 assert.deepEqual(portfolio.projects[0].technologies, ["Next.js", "Cloudflare"]);
+assert.equal(portfolio.projects[0].video_media_id, videoId);
 assert.equal((await api("/projects/hidden-project")).response.status, 404);
 ok(await api("/projects/visible-project"), 200);
 
@@ -87,6 +94,7 @@ const home = await fetch(base);
 assert.equal(home.status, 200);
 const homeHtml = await home.text();
 assert.match(homeHtml, /Ada Example/);
+assert.match(homeHtml, /video preview/);
 for (const section of ["about", "experience", "projects", "skills", "education", "certifications", "contact"]) {
   assert.match(homeHtml, new RegExp(`href="#${section}"`));
   assert.match(homeHtml, new RegExp(`id="${section}"`));
