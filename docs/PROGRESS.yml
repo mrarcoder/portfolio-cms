@@ -17,6 +17,7 @@ implemented:
   - Admin action controls use consistent SVG icons with accessible labels and hover titles across content, profile, settings, inbox, and sign-out workflows.
   - Vercel Web Analytics is integrated at the root layout for route-aware production page-view tracking.
   - An unlisted authenticated admin route provides username and password changes with current-password confirmation and session rotation.
+  - Credential inputs use a consistent single-column layout, and every password field has an accessible show/hide control.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
