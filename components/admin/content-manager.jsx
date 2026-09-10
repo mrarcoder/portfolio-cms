@@ -37,23 +37,23 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
 
   async function save(event) {
     event.preventDefault();
+    const formElement = event.currentTarget;
     const isNew = editing === "new";
     const payload = toPayload(resource, form);
     const fileFields = config.fields.filter(([, , type]) => ["image", "pdf", "video"].includes(type));
+    const selectedFiles = fileFields.map(([field]) => ({ field, file: formElement.elements.namedItem(field)?.files?.[0] })).filter(({ file }) => file);
     const uploads = [];
     setBusy(true);
     setMessage("");
     try {
-      for (const [field, , type] of fileFields) {
-        const file = event.currentTarget.elements.namedItem(field)?.files?.[0];
-        if (!file) continue;
+      for (const { field, file } of selectedFiles) {
         const media = new FormData();
         media.set("file", file);
         media.set("altText", form.title || form.name || "Portfolio media");
         const upload = await fetch("/api/admin/media", { method: "POST", body: media });
         const uploaded = await upload.json();
         if (!upload.ok) throw new Error(uploaded.error);
-        uploads.push({ field, id: uploaded.data.id, previousId: form[field], type });
+        uploads.push({ field, id: uploaded.data.id, previousId: form[field] });
         payload[field] = uploaded.data.id;
       }
       const response = await fetch(`/api/admin/${resource}${isNew ? "" : `/${editing}`}`, {
