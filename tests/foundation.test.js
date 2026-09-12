@@ -19,6 +19,19 @@ test("foundation schema enforces one owner and session ownership", () => {
   } finally { db.close(); }
 });
 
+test("project gallery migration preserves existing project media and ordering", () => {
+  const db = new DatabaseSync(":memory:");
+  try {
+    db.exec("PRAGMA foreign_keys = ON");
+    for (const name of ["0001_foundation.sql","0002_rate_limits.sql","0003_content.sql","0004_dark_glass_theme.sql","0005_project_video.sql"]) db.exec(readFileSync(new URL(`../database/migrations/${name}`,import.meta.url),"utf8"));
+    db.prepare("INSERT INTO media(id,storage_key,original_name,mime_type,byte_size) VALUES(1,'image','image.webp','image/webp',10),(2,'video','video.mp4','video/mp4',10)").run();
+    db.prepare("INSERT INTO projects(id,title,slug,start_date,image_media_id,video_media_id) VALUES(1,'Gallery','gallery','2026-01-01',1,2)").run();
+    db.exec(readFileSync(new URL("../database/migrations/0006_project_gallery.sql",import.meta.url),"utf8"));
+    assert.deepEqual(db.prepare("SELECT media_id,media_type,sort_order FROM project_media ORDER BY sort_order").all().map((row)=>({...row})),[{media_id:1,media_type:"image",sort_order:0},{media_id:2,media_type:"video",sort_order:1}]);
+    assert.throws(() => db.prepare("INSERT INTO project_media(project_id,media_id,media_type) VALUES(1,1,'image')").run());
+  } finally { db.close(); }
+});
+
 test("admin routes require auth and methods are constrained", async () => {
   const unknown = await worker.fetch(new Request("https://api.example/api/admin/profile"), {});
   assert.equal(unknown.status, 401);

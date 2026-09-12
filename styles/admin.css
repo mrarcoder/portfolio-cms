@@ -84,6 +84,19 @@ legend { padding: 0 8px; color: #c8d5d0; font-size: 12px; font-weight: 650; }
 .profile-photo-copy p { margin: 0 0 5px; color: var(--text); font-size: 14px; font-weight: 700; }
 .profile-photo-copy > small { display: block; color: var(--muted); font-size: 10px; line-height: 1.5; }
 .profile-photo-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+.project-gallery-field { display: grid; grid-column: 1/-1; gap: 13px; }
+.project-gallery-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.project-gallery-heading > div { display: grid; gap: 5px; }
+.project-gallery-heading small { color: var(--muted); font-size: 10px; line-height: 1.5; }
+.project-gallery-list { display: grid; gap: 12px; }
+.project-gallery-item { position: relative; display: grid; grid-template-columns: 31px minmax(0,1fr) 38px; align-items: center; gap: 10px; }
+.project-gallery-item .profile-photo-field { grid-column: auto; }
+.project-gallery-index { color: var(--accent); font: 10px/1 monospace; text-align: center; }
+.project-gallery-order { display: grid; gap: 6px; }
+.project-gallery-order button { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: rgba(255,255,255,.025); cursor: pointer; }
+.project-gallery-order button:disabled { opacity: .3; cursor: default; }
+.project-gallery-empty { display: grid; min-height: 120px; place-items: center; align-content: center; gap: 8px; border: 1px dashed var(--line-bright); border-radius: 16px; color: var(--muted); background: rgba(2,7,6,.25); cursor: pointer; }
+.project-gallery-empty:hover { color: var(--accent); background: color-mix(in srgb,var(--accent) 5%,transparent); }
 .photo-viewer { width: min(620px,100%); }
 .photo-viewer > img { display: block; width: auto; max-width: 100%; height: auto; max-height: calc(88vh - 125px); margin: 24px auto 0; border-radius: 16px; object-fit: contain; }
 .media-viewer-backdrop { z-index: 300; }

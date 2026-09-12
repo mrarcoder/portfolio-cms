@@ -6,10 +6,11 @@ import { fromRecord, resources, toPayload } from "../../lib/admin/resources";
 import SiteLogo, { siteHost } from "../portfolio/site-logo";
 import Icon from "../ui/icon";
 import MediaField from "./media-field";
+import ProjectGalleryField from "./project-gallery-field";
 import Toast from "../ui/toast";
 
 function blank(fields) {
-  return Object.fromEntries(fields.map(([name,,type,,options]) => [name, type === "checkbox" ? false : type === "select" ? options[0] : ""]));
+  return Object.fromEntries(fields.map(([name,,type,,options]) => [name, type === "checkbox" ? false : type === "select" ? options[0] : type === "gallery" ? [] : ""]));
 }
 
 export default function ContentManager({ resource, initialRows, categoryOptions = [] }) {
@@ -33,7 +34,7 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
   }, [editing]);
 
   function start(row) {
-    setFiles({});
+    setFiles(resource === "projects" ? { gallery_media:(row?.media || []).map((item) => ({ ...item,key:`saved-${item.id}` })) } : {});
     setEditing(row?.id || "new");
     setForm(row ? fromRecord(resource, row) : blank(config.fields));
   }
@@ -58,6 +59,26 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
         uploads.push({ field, id: uploaded.data.id, previousId: form[field] });
         payload[field] = uploaded.data.id;
       }
+      if (resource === "projects") {
+        const gallery = [];
+        for (const item of files.gallery_media || []) {
+          let id = item.id;
+          if (item.file) {
+            const media = new FormData();
+            media.set("file",item.file);
+            media.set("altText",form.title || "Project media");
+            const upload = await fetch("/api/admin/media",{ method:"POST",body:media });
+            const uploaded = await upload.json();
+            if (!upload.ok) throw new Error(uploaded.error);
+            id = uploaded.data.id;
+            uploads.push({ field:"gallery_media",id });
+          }
+          if (id) gallery.push({ id:Number(id),type:item.type });
+        }
+        payload.gallery_media = gallery;
+        payload.image_media_id = gallery.find((item) => item.type === "image")?.id || null;
+        payload.video_media_id = gallery.find((item) => item.type === "video")?.id || null;
+      }
       const response = await fetch(`/api/admin/${resource}${isNew ? "" : `/${editing}`}`, {
         method: isNew ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
@@ -66,7 +87,9 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
       const result = await response.json();
       if (!response.ok) throw new Error(result.error);
       const previous = rows.find((row) => row.id === editing);
-      await Promise.allSettled(fileFields.map(([field]) => previous?.[field]).filter((id) => id && !fileFields.some(([field]) => Number(payload[field]) === Number(id))).map((id) => fetch(`/api/admin/media/${id}`, { method: "DELETE" })));
+      const currentIds = resource === "projects" ? new Set(payload.gallery_media.map((item) => Number(item.id))) : new Set(fileFields.map(([field]) => Number(payload[field])).filter(Boolean));
+      const previousIds = resource === "projects" ? (previous?.media || []).map((item) => item.id) : fileFields.map(([field]) => previous?.[field]);
+      await Promise.allSettled(previousIds.filter((id) => id && !currentIds.has(Number(id))).map((id) => fetch(`/api/admin/media/${id}`, { method: "DELETE" })));
       try {
         const refreshed = await fetch(`/api/admin/${resource}`);
         const refreshedResult = await refreshed.json();
@@ -132,6 +155,7 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
               {config.fields.map(([name,label,type="text",required,options]) => {
                 if (type === "checkbox") return <label className="check-field" key={name}><input type="checkbox" checked={Boolean(form[name])} onChange={(event) => setForm({ ...form, [name]: event.target.checked })}/><span>{label}</span></label>;
                 if (["image","pdf","video"].includes(type)) return <MediaField key={name} label={label} type={type} mediaId={form[name]} file={files[name]} onChange={(file) => setFiles((current) => ({ ...current, [name]: file }))} onRemove={() => { setFiles((current) => ({ ...current, [name]: null })); setForm((current) => ({ ...current, [name]: null })); }}/>;
+                if (type === "gallery") return <ProjectGalleryField key={name} items={files.gallery_media || []} onChange={(gallery_media) => setFiles((current) => ({ ...current,gallery_media }))}/>;
                 return <label className="field" key={name}><span>{label}</span>{type === "textarea" ? <textarea value={form[name] ?? ""} required={required} onChange={(event) => setForm({ ...form, [name]: event.target.value })}/> : type === "select" ? <select value={form[name]} onChange={(event) => setForm({ ...form, [name]: event.target.value })}>{options.map((option) => <option key={option} value={option}>{option.replace("_", " ")}</option>)}</select> : type === "category" ? <select value={form[name] ?? ""} onChange={(event) => setForm({ ...form, [name]: event.target.value })}><option value="">Uncategorised</option>{categoryOptions.map((category) => <option key={category.id} value={category.id}>{category.name}{category.visible ? "" : " (hidden)"}</option>)}</select> : <><input type={type} value={form[name] ?? ""} required={required} onChange={(event) => setForm({ ...form, [name]: event.target.value })}/>{resource === "social-links" && name === "url" && siteHost(form[name]) && <span className="social-logo-preview"><SiteLogo url={form[name]} label={form.label}/><span>Logo detected from {siteHost(form[name])}</span></span>}</>}</label>;
               })}
               <div className="form-actions"><button className="button icon-only no-margin" type="submit" disabled={busy} aria-label={busy ? "Saving changes" : "Save changes"} title="Save changes"><Icon name="apply" className={busy ? "icon-spinning" : ""}/></button><button className="secondary-button icon-only" type="button" onClick={() => setEditing(null)} aria-label="Cancel changes" title="Cancel"><Icon name="cancel"/></button></div>

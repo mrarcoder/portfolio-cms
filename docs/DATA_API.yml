@@ -14,6 +14,7 @@ database:
     skill_categories: id, name, sort_order, visible
     skills: id, category_id nullable, name, sort_order, visible, timestamps
     projects: id, title, slug unique, summary, description, image_media_id, video_media_id, technologies_json, github_url, live_url, start_date, end_date nullable, progress, sort_order, visible, timestamps
+    project_media: id, project_id, media_id, media_type image_or_video, sort_order; ordered project carousel attachments
     achievements: id, title, organization, date, description, url, sort_order, visible, timestamps
     certifications: id, name, issuer, issue_date, expiry_date nullable, credential_id, credential_url, file_media_id, sort_order, visible, timestamps
     social_links: id, label, url, sort_order, visible
@@ -25,6 +26,7 @@ database:
     timestamps: Expand to created_at and updated_at where indicated.
     technologies_json: Validated bounded array of strings; no global technology-management subsystem.
     project_progress: completed, in_progress, archived; independent from public visibility.
+    project_gallery: Up to 20 ordered images/videos; the first image remains the card cover and the first video remains the hover preview.
     settings: Allowlisted site identity, site URL, SEO defaults, enabled sections, primary color, color mode, setup state.
     private_settings: Setup state and security configuration cannot be written through ordinary settings updates.
     rate_limits: Bounded persistent counters with expiry cleanup; no external rate-limit service.

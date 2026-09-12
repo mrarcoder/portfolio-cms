@@ -1,6 +1,7 @@
 status: production_deployed_awaiting_owner_setup
 current_phase: 7
 implemented:
+  - Projects support up to 20 ordered photos and videos with per-item view, image adjustment, replacement, deletion, and ordering controls; clicking a public project card opens a responsive keyboard-accessible media carousel.
   - All attached media use profile-style cards with view, edit/replace, and delete actions; project images reuse crop adjustments, and removals are committed only when the form is saved.
   - Next.js public portfolio, project details, setup/login, protected admin, same-origin API proxy, metadata, sitemap, and robots.
   - Cloudflare Worker authentication, content API, D1 persistence, R2 media validation/serving, contact limits, and inbox.

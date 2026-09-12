@@ -47,6 +47,32 @@ function validate(spec, input) {
   return data;
 }
 
+async function validateProjectMedia(env, value) {
+  if (!Array.isArray(value) || value.length > 20) return null;
+  const items = value.map((item) => ({ id:Number(item?.id), type:item?.type }));
+  if (items.some((item) => !Number.isInteger(item.id) || item.id < 1 || !["image","video"].includes(item.type)) || new Set(items.map((item) => item.id)).size !== items.length) return null;
+  if (!items.length) return [];
+  const rows = await env.DB.prepare(`SELECT id,mime_type FROM media WHERE id IN (${items.map(()=>"?").join(",")})`).bind(...items.map((item)=>item.id)).all();
+  if (rows.results.length !== items.length) return null;
+  const types = new Map(rows.results.map((row) => [row.id,row.mime_type.startsWith("image/") ? "image" : row.mime_type.startsWith("video/") ? "video" : "other"]));
+  return items.every((item) => types.get(item.id) === item.type) ? items : null;
+}
+
+async function projectMedia(env, projectIds) {
+  if (!projectIds.length) return new Map();
+  const result = await env.DB.prepare(`SELECT pm.project_id,pm.media_id AS id,pm.media_type AS type,pm.sort_order,m.original_name FROM project_media pm JOIN media m ON m.id=pm.media_id WHERE pm.project_id IN (${projectIds.map(()=>"?").join(",")}) ORDER BY pm.sort_order,pm.id`).bind(...projectIds).all();
+  const grouped = new Map(projectIds.map((id) => [Number(id),[]]));
+  for (const row of result.results) grouped.get(Number(row.project_id))?.push({ id:row.id,type:row.type,original_name:row.original_name });
+  return grouped;
+}
+
+async function replaceProjectMedia(env, projectId, items) {
+  await env.DB.batch([
+    env.DB.prepare("DELETE FROM project_media WHERE project_id=?").bind(projectId),
+    ...items.map((item,index) => env.DB.prepare("INSERT INTO project_media(project_id,media_id,media_type,sort_order) VALUES(?,?,?,?)").bind(projectId,item.id,item.type,index)),
+  ]);
+}
+
 async function requireAdmin(request, env, mutate = false) {
   if (mutate && !requireBrowserOrigin(request, env)) return json({ success:false, error:"Invalid request origin" },403);
   return (await getSessionUser(request, env)) || json({ success:false, error:"Authentication required" },401);
@@ -59,6 +85,10 @@ export async function adminResource(request, env, resource, id) {
   if (auth instanceof Response) return auth;
   if (request.method === "GET") {
     const result = await env.DB.prepare(`SELECT * FROM ${spec.table} ORDER BY sort_order, id LIMIT 500`).all();
+    if (resource === "projects") {
+      const media = await projectMedia(env,result.results.map((row)=>row.id));
+      result.results = result.results.map((row) => ({ ...row,media:media.get(row.id) || [] }));
+    }
     return json({ success:true, data:result.results });
   }
   if (request.method === "DELETE" && id) {
@@ -67,16 +97,19 @@ export async function adminResource(request, env, resource, id) {
   }
   if (!["POST","PUT"].includes(request.method) || (request.method === "PUT" && !id)) return json({ success:false, error:"Method not allowed" },405);
   const input = await readJson(request, 25000); const data = input && validate(spec,input);
-  if (!data) return json({ success:false, error:"Invalid content" },422);
+  const gallery = resource === "projects" && input ? await validateProjectMedia(env,input.gallery_media) : undefined;
+  if (!data || (resource === "projects" && gallery === null)) return json({ success:false, error:"Invalid content" },422);
   const columns = Object.keys(data); const values = Object.values(data);
   try {
     if (request.method === "POST") {
       const order = await env.DB.prepare(`SELECT COALESCE(MAX(sort_order), -1) + 1 AS next FROM ${spec.table}`).first();
       const result = await env.DB.prepare(`INSERT INTO ${spec.table} (${columns.join(",")}, sort_order) VALUES (${columns.map(()=>"?").join(",")}, ?)`).bind(...values,order.next).run();
+      if (resource === "projects") await replaceProjectMedia(env,result.meta.last_row_id,gallery);
       return json({ success:true, data:{ id:result.meta.last_row_id } },201);
     }
     const suffix = spec.timestamps === false ? "" : ", updated_at = CURRENT_TIMESTAMP";
     const result = await env.DB.prepare(`UPDATE ${spec.table} SET ${columns.map((field)=>`${field} = ?`).join(",")}${suffix} WHERE id = ?`).bind(...values,id).run();
+    if (result.meta.changes && resource === "projects") await replaceProjectMedia(env,Number(id),gallery);
     return result.meta.changes ? json({ success:true, data:{ id:Number(id) } }) : json({ success:false,error:"Not found"},404);
   } catch { return json({ success:false, error:"Content conflicts with an existing record" },409); }
 }
@@ -141,11 +174,11 @@ export async function portfolio(env){
   const [p,s,ex,ed,ca,sk,pr,ac,ce,so]=await Promise.all([
     env.DB.prepare("SELECT * FROM profile WHERE id=1").first(),env.DB.prepare(`SELECT key,value_json FROM settings WHERE key IN (${publicSettings.map(()=>"?").join(",")})`).bind(...publicSettings).all(),
     ...["experiences","education","skill_categories","skills","projects","achievements","certifications","social_links"].map((t)=>env.DB.prepare(t==="skills"?"SELECT skills.* FROM skills LEFT JOIN skill_categories ON skill_categories.id=skills.category_id WHERE skills.visible=1 AND (skills.category_id IS NULL OR skill_categories.visible=1) ORDER BY skills.sort_order,skills.id":`SELECT * FROM ${t} WHERE visible=1 ORDER BY sort_order,id`).all())]);
-  const configured=Object.fromEntries(s.results.map((x)=>[x.key,JSON.parse(x.value_json)]));const enabled=configured.enabled_sections||{};
-  return json({success:true,data:{profile:p,settings:configured,experiences:enabled.experience===false?[]:ex.results,education:enabled.education===false?[]:ed.results,skillCategories:enabled.skills===false?[]:ca.results,skills:enabled.skills===false?[]:sk.results,projects:enabled.projects===false?[]:pr.results.map((x)=>({...x,technologies:JSON.parse(x.technologies_json)})),achievements:enabled.achievements===false?[]:ac.results,certifications:enabled.certifications===false?[]:ce.results,socialLinks:so.results}});
+  const configured=Object.fromEntries(s.results.map((x)=>[x.key,JSON.parse(x.value_json)]));const enabled=configured.enabled_sections||{};const media=await projectMedia(env,pr.results.map((row)=>row.id));
+  return json({success:true,data:{profile:p,settings:configured,experiences:enabled.experience===false?[]:ex.results,education:enabled.education===false?[]:ed.results,skillCategories:enabled.skills===false?[]:ca.results,skills:enabled.skills===false?[]:sk.results,projects:enabled.projects===false?[]:pr.results.map((x)=>({...x,technologies:JSON.parse(x.technologies_json),media:media.get(x.id)||[]})),achievements:enabled.achievements===false?[]:ac.results,certifications:enabled.certifications===false?[]:ce.results,socialLinks:so.results}});
 }
 
-export async function publicProject(env,slug){const p=await env.DB.prepare("SELECT * FROM projects WHERE slug=? AND visible=1").bind(slug).first();return p?json({success:true,data:{...p,technologies:JSON.parse(p.technologies_json)}}):json({success:false,error:"Not found"},404);}
+export async function publicProject(env,slug){const p=await env.DB.prepare("SELECT * FROM projects WHERE slug=? AND visible=1").bind(slug).first();if(!p)return json({success:false,error:"Not found"},404);const media=await projectMedia(env,[p.id]);return json({success:true,data:{...p,technologies:JSON.parse(p.technologies_json),media:media.get(p.id)||[]}});}
 
 export async function submitMessage(request,env){if(!requireBrowserOrigin(request,env))return json({success:false,error:"Invalid request origin"},403);const b=await readJson(request);if(!b||b.website)return json({success:true,data:{}},201);const values=[cleanText(b.name,100),cleanText(b.email,200),cleanText(b.subject??"",200),cleanText(b.message,3000)];if(values.some((v)=>v===null)||!values[0]||!emailPattern.test(values[1])||!values[3])return json({success:false,error:"Invalid message"},422);const key=`contact:${await tokenHash(request.headers.get("CF-Connecting-IP")||"unknown")}`;const now=Math.floor(Date.now()/1000);const current=await env.DB.prepare("SELECT attempt_count,window_end FROM rate_limits WHERE key=?").bind(key).first();if(current&&current.window_end>now&&current.attempt_count>=3)return json({success:false,error:"Please wait before sending another message"},429);await env.DB.batch([env.DB.prepare("INSERT INTO messages(name,email,subject,message) VALUES(?,?,?,?)").bind(...values),env.DB.prepare("INSERT INTO rate_limits(key,attempt_count,window_end) VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET attempt_count=CASE WHEN window_end<=? THEN 1 ELSE attempt_count+1 END,window_end=CASE WHEN window_end<=? THEN ? ELSE window_end END").bind(key,now+3600,now,now,now+3600)]);return json({success:true,data:{}},201);}
 

@@ -83,6 +83,12 @@
   .profile-photo-card { align-items: flex-start; flex-direction: column; }
   .profile-photo-preview { width: 128px; height: 160px; }
   .profile-photo-actions .secondary-button { flex: 0 0 38px; }
+  .project-gallery-item { grid-template-columns: 1fr 38px; }
+  .project-gallery-index { display: none; }
+  .project-carousel-backdrop { padding: 10px; }
+  .project-carousel { max-height: calc(100vh - 20px); padding: 11px; border-radius: 17px; }
+  .project-carousel-stage { min-height: 48vh; }
+  .project-carousel-stage > img,.project-carousel-stage > video { height: 48vh; }
   .hero-panel { padding-inline: 20px; }
   .portrait, .portrait-placeholder { height: min(116vw,440px); }
   .hero-actions { align-items: flex-start; flex-direction: column; }
