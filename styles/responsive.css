@@ -19,6 +19,12 @@
   .secondary-button.icon-only,.profile-photo-actions .secondary-button,.project-gallery-order button,.icon-button { width: 44px; min-width: 44px; height: 44px; min-height: 44px; }
   .password-control button { width: 42px; height: 42px; }
   .sidebar-footer { position: sticky; bottom: -18px; padding-block: 14px 18px; background: linear-gradient(transparent,rgba(10,16,15,.98) 20%); }
+  .portfolio-shell .public-header { padding-top: 10px; }
+  .portfolio-shell .header-inner { min-height: 60px; }
+  .public-nav { display: none; }
+  .public-menu-button { display: grid; }
+  .hero-panel { grid-template-columns: 1fr; gap: 36px; }
+  .portrait-frame { width: min(100%,520px); margin-inline: auto; }
 }
 
 @media (max-width: 760px) {
@@ -47,11 +53,8 @@
   .modal-card { max-height: 94vh; padding: 20px; border-radius: 20px; }
   .modal-head { top: -20px; margin: -20px -20px 0; padding: 20px; }
   .portfolio-shell .public-header { padding-top: 9px; }
-  .portfolio-shell .public-header .header-inner { flex-wrap: wrap; gap: 9px; padding: 11px 13px 9px; border-radius: 15px; }
-  .public-nav { order: 3; width: 100%; gap: 7px; padding-bottom: 2px; }
-  .public-nav a { padding: 8px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-soft); }
-  .public-nav .nav-cta { padding: 8px 10px; }
-  .portfolio-section { scroll-margin-top: 135px; }
+  .portfolio-shell .public-header .header-inner { gap: 12px; padding-inline: 13px; border-radius: 15px; }
+  .portfolio-section { scroll-margin-top: 90px; }
   .public-hero { min-height: auto; padding-block: 25px 18px; }
   .hero-panel { grid-template-columns: 1fr; gap: 34px; padding: 32px 25px 25px; border-radius: 28px; }
   .public-hero h1 { font-size: clamp(49px,14vw,78px); }
@@ -68,6 +71,7 @@
   .timeline-index { display: none; }
   .project-grid, .simple-grid, .skill-groups { grid-template-columns: 1fr; }
   .project-card img, .project-placeholder { height: 230px; }
+  .project-card-links a,.video-preview-button,.project-gallery-button { min-height: 44px; }
   .contact-grid { gap: 40px; }
   .auth-card { padding: 29px 23px; border-radius: 22px; }
   .auth-card .brand { margin-bottom: 48px; }
@@ -91,6 +95,11 @@
   .admin-header .brand-mark { width: 36px; height: 36px; }
   .admin-main { padding-top: 0; }
   .admin-title { font-size: clamp(31px,10vw,42px); }
+  .portfolio-shell .brand > span:last-child { max-width: 150px; }
+  .public-hero h1 { font-size: clamp(46px,14vw,70px); }
+  .hero-panel { padding: 28px 20px 21px; }
+  .portfolio-section { padding: 25px 19px; }
+  .glass-form { padding: 20px 16px; }
   .admin-panels { grid-template-columns: 1fr; }
   .metric-card { min-height: 155px; }
   .row-copy { align-items: flex-start; }

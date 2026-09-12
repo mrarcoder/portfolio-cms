@@ -1,6 +1,7 @@
 import Image from "next/image";
 import ContactForm from "./contact-form";
 import ProjectCard from "./project-card";
+import PublicHeader from "./public-header";
 import SiteLogo from "./site-logo";
 
 function Section({ id, title, number, intro, children }) {
@@ -15,8 +16,14 @@ function Section({ id, title, number, intro, children }) {
   );
 }
 
+function formatDate(value) {
+  if (!value) return "";
+  const date = new Date(`${value}T00:00:00Z`);
+  return Number.isNaN(date.valueOf()) ? value : date.toLocaleDateString("en",{ month:"short",year:"numeric",timeZone:"UTC" });
+}
+
 function Dates({ start, end, current }) {
-  return <span>{start}{current ? " — Present" : end ? ` — ${end}` : ""}</span>;
+  return <span>{formatDate(start)}{current ? " — Present" : end ? ` — ${formatDate(end)}` : ""}</span>;
 }
 
 export default function Portfolio({ data }) {
@@ -46,14 +53,7 @@ export default function Portfolio({ data }) {
     <div className="portfolio-shell" style={{ "--accent": s.primary_color || "#70f0c0" }} data-mode={s.color_mode || "dark"}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\u003c") }}/>
       <div className="scroll-progress" aria-hidden="true" />
-      <header className="public-header">
-        <div className="container header-inner">
-          <a className="brand" href="#top"><span className="brand-mark">{initials}</span><span>{p.name || s.site_name || "Portfolio"}</span></a>
-          <nav className="public-nav" aria-label="Portfolio sections">
-            {navigation.map(([id, label]) => <a className={id === "contact" ? "nav-cta" : undefined} href={`#${id}`} key={id}>{label}{id === "contact" && <span aria-hidden="true"> ↗</span>}</a>)}
-          </nav>
-        </div>
-      </header>
+      <PublicHeader name={p.name || s.site_name || "Portfolio"} initials={initials} navigation={navigation}/>
 
       <main id="main">
         <section className="public-hero container" id="top">
@@ -80,14 +80,14 @@ export default function Portfolio({ data }) {
         </section>
 
         <div className="portfolio-content container">
-          {sections.about && <Section id="about" title="About" number={number()} intro="The thinking, craft, and experience behind the work."><div className="about-layout"><h2 className="section-title">I turn complex ideas into clear digital experiences.</h2><p className="section-copy pre-line">{p.long_bio}</p></div></Section>}
+          {sections.about && <Section id="about" title="About" number={number()} intro="The thinking, craft, and experience behind the work."><div className="about-layout"><h2 className="section-title">{p.short_bio || p.title}</h2><p className="section-copy pre-line">{p.long_bio}</p></div></Section>}
           {sections.experience && <Section id="experience" title="Experience" number={number()} intro="A track record of shipping, learning, and creating impact."><div className="timeline">{data.experiences.map((item, index) => <article key={item.id}><span className="timeline-index">{String(index + 1).padStart(2, "0")}</span><div className="timeline-role"><h2>{item.position}</h2><p>{item.company}{item.location && ` · ${item.location}`}</p></div><div className="timeline-detail"><p className="timeline-date"><Dates start={item.start_date} end={item.end_date} current={item.is_current}/></p><p className="pre-line">{item.description}</p></div></article>)}</div></Section>}
           {sections.projects && <Section id="projects" title="Selected work" number={number()} intro="Products and ideas shaped into useful, polished outcomes."><div className="project-grid">{data.projects.map((item, index) => <ProjectCard project={item} index={index} key={item.id}/>)}</div></Section>}
           {sections.skills && <Section id="skills" title="Capabilities" number={number()} intro="Tools and technologies I use to move from concept to production."><div className="skill-groups">{data.skillCategories.map((category) => { const skills = data.skills.filter((item) => item.category_id === category.id); return skills.length > 0 && <article key={category.id}><span className="skill-glow"/><p className="skill-count">{String(skills.length).padStart(2, "0")}</p><h2>{category.name}</h2><div className="skill-list">{skills.map((item) => <span key={item.id}>{item.name}</span>)}</div></article>; })}</div></Section>}
-          {sections.education && <Section id="education" title="Education" number={number()} intro="The academic foundation behind my practice."><div className="simple-grid">{data.education.map((item) => <article key={item.id}><p className="card-date"><Dates start={item.start_date} end={item.end_date}/></p><h2>{item.degree}</h2><p>{item.institution}{item.field && ` · ${item.field}`}</p></article>)}</div></Section>}
-          {sections.achievements && <Section id="achievements" title="Achievements" number={number()} intro="Milestones that mark progress and meaningful contribution."><div className="simple-grid">{data.achievements.map((item) => <article key={item.id}><p className="card-date">{item.date}</p><h2>{item.title}</h2><p>{item.description}</p><p className="muted">{item.organization}</p></article>)}</div></Section>}
-          {sections.certifications && <Section id="certifications" title="Certifications" number={number()} intro="Continued learning, verified."><div className="simple-grid">{data.certifications.map((item) => <article key={item.id}><p className="card-date">Issued {item.issue_date}</p><h2>{item.name}</h2><p>{item.issuer}</p><div className="credential-links">{item.credential_url && <a href={item.credential_url}>View credential ↗</a>}{item.file_media_id && <a href={`/api/media/${item.file_media_id}`}>Download certificate ↓</a>}</div></article>)}</div></Section>}
-          {sections.contact && <Section id="contact" title="Contact" number={number()} intro="Have an opportunity or an idea? My inbox is open."><div className="contact-grid"><div className="contact-copy"><p className="contact-overline">Let&apos;s work together</p><h2 className="section-title">Build something people remember.</h2><p className="section-copy">Tell me what you are working on, where you need help, and what success looks like.</p>{p.public_email && <a className="contact-email" href={`mailto:${p.public_email}`}>{p.public_email} <span aria-hidden="true">↗</span></a>}<div className="socials">{data.socialLinks.map((item) => <a href={item.url} key={item.id}><span className="social-name"><SiteLogo url={item.url} label={item.label}/><span>{item.label}</span></span><span aria-hidden="true">↗</span></a>)}</div></div><div className="contact-form-panel"><div className="form-window-bar" aria-hidden="true"><span/><span/><span/><small>new-message</small></div><ContactForm/></div></div></Section>}
+          {sections.education && <Section id="education" title="Education" number={number()} intro="The academic foundation behind my practice."><div className="simple-grid">{data.education.map((item) => <article key={item.id}><p className="card-date"><Dates start={item.start_date} end={item.end_date}/></p><h2>{item.degree}</h2><p>{item.institution}{item.field && ` · ${item.field}`}</p>{item.description && <p className="card-description pre-line">{item.description}</p>}</article>)}</div></Section>}
+          {sections.achievements && <Section id="achievements" title="Achievements" number={number()} intro="Milestones that mark progress and meaningful contribution."><div className="simple-grid">{data.achievements.map((item) => <article key={item.id}><p className="card-date">{formatDate(item.date)}</p><h2>{item.title}</h2><p>{item.description}</p><p className="muted">{item.organization}</p>{item.url && <a className="card-action" href={item.url} target="_blank" rel="noreferrer">View achievement <span aria-hidden="true">↗</span></a>}</article>)}</div></Section>}
+          {sections.certifications && <Section id="certifications" title="Certifications" number={number()} intro="Continued learning, verified."><div className="simple-grid">{data.certifications.map((item) => <article key={item.id}><p className="card-date">Issued {formatDate(item.issue_date)}</p><h2>{item.name}</h2><p>{item.issuer}</p><div className="credential-links">{item.credential_url && <a href={item.credential_url} target="_blank" rel="noreferrer">View credential ↗</a>}{item.file_media_id && <a href={`/api/media/${item.file_media_id}`}>Download certificate ↓</a>}</div></article>)}</div></Section>}
+          {sections.contact && <Section id="contact" title="Contact" number={number()} intro="Have an opportunity or an idea? My inbox is open."><div className="contact-grid"><div className="contact-copy"><p className="contact-overline">Let&apos;s work together</p><h2 className="section-title">Build something people remember.</h2><p className="section-copy">Tell me what you are working on, where you need help, and what success looks like.</p><div className="direct-contact">{p.public_email && <a href={`mailto:${p.public_email}`}><span>Email</span><strong>{p.public_email}</strong></a>}{p.public_phone && <a href={`tel:${p.public_phone}`}><span>Phone</span><strong>{p.public_phone}</strong></a>}</div><div className="socials">{data.socialLinks.map((item) => <a href={item.url} target="_blank" rel="noreferrer" key={item.id}><span className="social-name"><SiteLogo url={item.url} label={item.label}/><span>{item.label}</span></span><span aria-hidden="true">↗</span></a>)}</div></div><div className="contact-form-panel"><div className="form-window-bar" aria-hidden="true"><span/><span/><span/><small>new-message</small></div><ContactForm/></div></div></Section>}
         </div>
       </main>
 

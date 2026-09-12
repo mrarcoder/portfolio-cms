@@ -55,8 +55,8 @@ export default function ProjectCard({ project, index }) {
         <div className="card-meta"><p>{project.technologies.join(" · ")}</p>{gallery.length > 0 && <button className="project-gallery-button" type="button" onClick={() => showGallery()} aria-label={`View ${project.title} gallery`} title="View gallery"><Icon name="eye"/><span>{gallery.length}</span></button>}</div>
         <h2><Link href={`/projects/${project.slug}`}>{project.title}</Link></h2><p>{project.summary}</p>
         {(project.github_url || project.live_url) && <div className="project-card-links">
-          {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" aria-label={`Open ${project.title} source code on GitHub`} title="GitHub repository"><Icon name="github"/></a>}
-          {project.live_url && <a href={project.live_url} target="_blank" rel="noreferrer" aria-label={`Open live ${project.title} project`} title="Live project"><Icon name="external"/></a>}
+          {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" aria-label={`Open ${project.title} source code on GitHub`}><Icon name="github"/><span>GitHub</span></a>}
+          {project.live_url && <a href={project.live_url} target="_blank" rel="noreferrer" aria-label={`Open live ${project.title} project`}><Icon name="external"/><span>Live site</span></a>}
         </div>}
       </div>
     </article>
