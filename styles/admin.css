@@ -56,6 +56,8 @@
 .field input[type="file"] { padding: 9px; color: var(--muted); }
 .field input[type="file"]::file-selector-button { margin-right: 12px; padding: 7px 10px; border: 0; border-radius: 8px; color: #06100d; background: var(--accent); font: inherit; font-weight: 700; cursor: pointer; }
 .field small { color: var(--muted); font-size: 10px; font-weight: 430; line-height: 1.5; }
+.current-media-row { display: flex; min-height: 46px; align-items: center; justify-content: space-between; gap: 14px; padding: 7px 8px 7px 13px; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); background: rgba(255,255,255,.035); font-size: 11px; font-weight: 500; }
+.current-media-row .secondary-button { flex: 0 0 36px; width: 36px; min-width: 36px; height: 36px; min-height: 36px; padding: 0; }
 .password-control { position: relative; display: block; }
 .password-control input { display: block; padding-right: 52px; }
 .password-control button { position: absolute; top: 50%; right: 7px; display: grid; width: 36px; height: 36px; place-items: center; padding: 0; transform: translateY(-50%); border: 0; border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; transition: color .2s ease, background .2s ease; }
@@ -84,6 +86,12 @@ legend { padding: 0 8px; color: #c8d5d0; font-size: 12px; font-weight: 650; }
 .profile-photo-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
 .photo-viewer { width: min(620px,100%); }
 .photo-viewer > img { display: block; width: auto; max-width: 100%; height: auto; max-height: calc(88vh - 125px); margin: 24px auto 0; border-radius: 16px; object-fit: contain; }
+.media-viewer-backdrop { z-index: 300; }
+.media-viewer { width: min(960px,100%); }
+.media-viewer-stage { display: grid; min-height: 320px; margin-top: 24px; place-items: center; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: rgba(1,4,4,.7); }
+.media-viewer-stage img,.media-viewer-stage video { display: block; width: 100%; max-height: calc(88vh - 150px); object-fit: contain; }
+.media-viewer-pdf { height: min(70vh,760px); }
+.media-viewer-stage iframe { width: 100%; height: 100%; border: 0; background: white; }
 .photo-editor-modal { width: min(920px,100%); }
 .photo-editor-layout { display: grid; grid-template-columns: minmax(260px,1.1fr) minmax(240px,.9fr); gap: 26px; padding-top: 26px; }
 .photo-crop-stage { position: relative; display: grid; overflow: hidden; max-width: 400px; aspect-ratio: 4/5; place-items: center; justify-self: center; border: 1px solid var(--line-bright); border-radius: 18px; background: rgba(1,4,4,.7); box-shadow: 0 18px 50px rgba(0,0,0,.3); }

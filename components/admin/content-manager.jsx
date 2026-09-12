@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { fromRecord, resources, toPayload } from "../../lib/admin/resources";
 import SiteLogo, { siteHost } from "../portfolio/site-logo";
 import Icon from "../ui/icon";
+import MediaViewer from "./media-viewer";
 import Toast from "../ui/toast";
 
 function blank(fields) {
@@ -24,7 +25,7 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
   useEffect(() => {
     if (!editing) return undefined;
     const previousOverflow = document.body.style.overflow;
-    const close = (event) => { if (event.key === "Escape") setEditing(null); };
+    const close = (event) => { if (event.key === "Escape" && !document.querySelector("[data-media-viewer]")) setEditing(null); };
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", close);
     return () => { document.body.style.overflow = previousOverflow;window.removeEventListener("keydown", close); };
@@ -126,11 +127,11 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
           <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="editor-title">
             <div className="modal-head"><div><p className="eyebrow">{editing === "new" ? "Create new" : "Edit item"}</p><h2 id="editor-title">{config.singular[0].toUpperCase()}{config.singular.slice(1)}</h2></div><button className="icon-button" type="button" onClick={() => setEditing(null)} aria-label="Close editor" title="Close" autoFocus><Icon name="cancel"/></button></div>
             <form className="editor-form" onSubmit={save}>
-              {config.fields.map(([name,label,type="text",required,options]) => (
-                <label className={type === "checkbox" ? "check-field" : "field"} key={name}>
-                  {type === "checkbox" ? <><input type="checkbox" checked={Boolean(form[name])} onChange={(event) => setForm({ ...form, [name]: event.target.checked })}/><span>{label}</span></> : <><span>{label}</span>{type === "textarea" ? <textarea value={form[name] ?? ""} required={required} onChange={(event) => setForm({ ...form, [name]: event.target.value })}/> : type === "select" ? <select value={form[name]} onChange={(event) => setForm({ ...form, [name]: event.target.value })}>{options.map((option) => <option key={option} value={option}>{option.replace("_", " ")}</option>)}</select> : type === "category" ? <select value={form[name] ?? ""} onChange={(event) => setForm({ ...form, [name]: event.target.value })}><option value="">Uncategorised</option>{categoryOptions.map((category) => <option key={category.id} value={category.id}>{category.name}{category.visible ? "" : " (hidden)"}</option>)}</select> : ["image","pdf","video"].includes(type) ? <><input name={name} type="file" accept={type === "image" ? "image/jpeg,image/png,image/webp" : type === "video" ? "video/mp4,video/webm" : "application/pdf"}/><small>{form[name] ? "A file is attached. Choose another to replace it." : `${type === "video" ? "MP4 or WebM" : type === "image" ? "JPEG, PNG, or WebP" : "PDF"} · maximum 3 MiB`}</small></> : <><input type={type} value={form[name] ?? ""} required={required} onChange={(event) => setForm({ ...form, [name]: event.target.value })}/>{resource === "social-links" && name === "url" && siteHost(form[name]) && <span className="social-logo-preview"><SiteLogo url={form[name]} label={form.label}/><span>Logo detected from {siteHost(form[name])}</span></span>}</>}</>}
-                </label>
-              ))}
+              {config.fields.map(([name,label,type="text",required,options]) => {
+                if (type === "checkbox") return <label className="check-field" key={name}><input type="checkbox" checked={Boolean(form[name])} onChange={(event) => setForm({ ...form, [name]: event.target.checked })}/><span>{label}</span></label>;
+                if (["image","pdf","video"].includes(type)) return <div className="field file-field" key={name}><label htmlFor={`media-${name}`}>{label}</label><input id={`media-${name}`} name={name} type="file" accept={type === "image" ? "image/jpeg,image/png,image/webp" : type === "video" ? "video/mp4,video/webm" : "application/pdf"}/><small>{form[name] ? "Choose another file to replace the current one." : `${type === "video" ? "MP4 or WebM" : type === "image" ? "JPEG, PNG, or WebP" : "PDF"} · maximum 3 MiB`}</small><MediaViewer mediaId={form[name]} type={type} label={label}/></div>;
+                return <label className="field" key={name}><span>{label}</span>{type === "textarea" ? <textarea value={form[name] ?? ""} required={required} onChange={(event) => setForm({ ...form, [name]: event.target.value })}/> : type === "select" ? <select value={form[name]} onChange={(event) => setForm({ ...form, [name]: event.target.value })}>{options.map((option) => <option key={option} value={option}>{option.replace("_", " ")}</option>)}</select> : type === "category" ? <select value={form[name] ?? ""} onChange={(event) => setForm({ ...form, [name]: event.target.value })}><option value="">Uncategorised</option>{categoryOptions.map((category) => <option key={category.id} value={category.id}>{category.name}{category.visible ? "" : " (hidden)"}</option>)}</select> : <><input type={type} value={form[name] ?? ""} required={required} onChange={(event) => setForm({ ...form, [name]: event.target.value })}/>{resource === "social-links" && name === "url" && siteHost(form[name]) && <span className="social-logo-preview"><SiteLogo url={form[name]} label={form.label}/><span>Logo detected from {siteHost(form[name])}</span></span>}</>}</label>;
+              })}
               <div className="form-actions"><button className="button icon-only no-margin" type="submit" disabled={busy} aria-label={busy ? "Saving changes" : "Save changes"} title="Save changes"><Icon name="apply" className={busy ? "icon-spinning" : ""}/></button><button className="secondary-button icon-only" type="button" onClick={() => setEditing(null)} aria-label="Cancel changes" title="Cancel"><Icon name="cancel"/></button></div>
             </form>
           </section>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ProfilePhotoEditor from "./profile-photo-editor";
+import MediaViewer from "./media-viewer";
 import Icon from "../ui/icon";
 import Toast from "../ui/toast";
 
@@ -46,5 +47,5 @@ export default function ProfileForm({ initial }) {
     } finally { setBusy(false); }
   }
 
-  return <><form className="panel editor-form profile-editor" onSubmit={save}>{fields.map(([name,label,type="text"]) => <label className="field" key={name}><span>{label}</span>{type === "textarea" ? <textarea value={form[name] || ""} onChange={(event) => setForm({ ...form,[name]:event.target.value })}/> : <input type={type} value={form[name] || ""} onChange={(event) => setForm({ ...form,[name]:event.target.value })}/>}</label>)}<ProfilePhotoEditor currentMediaId={form.photo_media_id} file={photoFile} onFileChange={setPhotoFile}/><label className="field file-field"><span>Résumé PDF</span><input name="resume" type="file" accept="application/pdf"/><small>{form.resume_media_id ? "Current résumé saved · choose a file to replace" : "PDF · maximum 3 MiB"}</small></label><div className="form-actions"><button className="button icon-only no-margin" disabled={busy} aria-label={busy ? "Saving profile" : "Save profile"} title="Save profile"><Icon name={busy ? "reset" : "apply"} className={busy ? "icon-spinning" : ""}/></button></div></form><Toast message={message} clear={setMessage} error={error}/></>;
+  return <><form className="panel editor-form profile-editor" onSubmit={save}>{fields.map(([name,label,type="text"]) => <label className="field" key={name}><span>{label}</span>{type === "textarea" ? <textarea value={form[name] || ""} onChange={(event) => setForm({ ...form,[name]:event.target.value })}/> : <input type={type} value={form[name] || ""} onChange={(event) => setForm({ ...form,[name]:event.target.value })}/>}</label>)}<ProfilePhotoEditor currentMediaId={form.photo_media_id} file={photoFile} onFileChange={setPhotoFile}/><div className="field file-field"><label htmlFor="resume-upload">Résumé PDF</label><input id="resume-upload" name="resume" type="file" accept="application/pdf"/><small>{form.resume_media_id ? "Choose another PDF to replace the current résumé." : "PDF · maximum 3 MiB"}</small><MediaViewer mediaId={form.resume_media_id} type="pdf" label="Résumé PDF"/></div><div className="form-actions"><button className="button icon-only no-margin" disabled={busy} aria-label={busy ? "Saving profile" : "Save profile"} title="Save profile"><Icon name={busy ? "reset" : "apply"} className={busy ? "icon-spinning" : ""}/></button></div></form><Toast message={message} clear={setMessage} error={error}/></>;
 }

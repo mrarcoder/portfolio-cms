@@ -23,6 +23,7 @@ implemented:
   - Hero content counters were removed; interaction polish now includes a scroll-aware hero exit, drifting background grid, animated panel accents, card light sweeps, portrait depth, button icon motion, and clearer keyboard focus states.
   - Projects support optional validated MP4/WebM showcase uploads in the admin editor; public project cards play muted previews on hover or keyboard focus and provide an explicit touch-friendly preview control.
   - Project saves snapshot every selected media file before asynchronous uploads begin, so an image and showcase video can be uploaded or replaced together without losing the form event reference.
+  - Admin forms provide an eye-icon viewer for every attached project image, project video, certification PDF, and résumé; profile photos retain their existing viewer and editor.
 completed:
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
@@ -48,6 +49,7 @@ checks:
   - Lint, Node tests, optimized production build, and desktop/mobile browser renders pass after the full public portfolio redesign; the 390px layout remains contained and honors reduced-motion preferences.
   - Project video smoke coverage verifies authenticated upload, project association, public visibility, portfolio serialization, and rendered preview markup.
   - Lint and the optimized production build pass after fixing sequential project image/video uploads.
+  - Lint, Node tests, optimized production build, YAML parsing, and diff checks pass after adding current-file viewers for project media, certification PDFs, and the résumé.
 blockers:
   - The owner must choose the production administrator username and password through /setup.
   - The Vercel account must authorize the GitHub repository before automatic deployments from main can be enabled; CLI deployment remains available.
