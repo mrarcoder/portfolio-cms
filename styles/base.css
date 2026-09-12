@@ -56,7 +56,7 @@ h1 { margin: 22px 0; font-size: clamp(42px, 6vw, 74px); font-weight: 620; line-h
 .action-icon { display: block; width: 18px; height: 18px; flex: 0 0 auto; }
 .icon-only { width: 38px; min-width: 38px; padding: 0; }
 .button.icon-only { width: 46px; min-width: 46px; padding: 0; }
-.row-actions button { width: 37px; min-width: 37px; padding: 0; }
+.row-actions button { width: 42px; min-width: 42px; min-height: 42px; padding: 0; }
 .icon-spinning { animation: spin .8s linear infinite; }
 .row-actions button:disabled { cursor: not-allowed; }
 .row-actions .danger { color: var(--danger); }

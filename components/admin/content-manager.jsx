@@ -144,7 +144,7 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
   return (
     <>
       <div className="page-heading">
-        <div><p className="eyebrow">Content system</p><h1 className="admin-title">{config.label}</h1><p className="muted">Manage what appears in your public portfolio.</p></div>
+        <div><p className="eyebrow">Content system</p><h1 className="admin-title">{config.label}</h1><p className="muted">{rows.length} {rows.length === 1 ? "item" : "items"} · {rows.filter((row) => row.visible).length} visible on your portfolio</p></div>
         <button className="button icon-only no-margin" onClick={() => start()} aria-label={`Add ${config.singular}`} title={`Add ${config.singular}`}><Icon name="add"/></button>
       </div>
       {editing && (

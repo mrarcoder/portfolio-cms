@@ -1,3 +1,3 @@
 export default function Loading() {
-  return <p className="muted" role="status">Checking your workspace…</p>;
+  return <div className="admin-loading" role="status"><span/><span/><span/><p>Loading your workspace…</p></div>;
 }

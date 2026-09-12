@@ -1,6 +1,8 @@
 status: production_deployed_awaiting_owner_setup
 current_phase: 7
 implemented:
+  - The admin workspace now has an active-state icon sidebar on desktop and an accessible full-height navigation drawer on tablets and phones, with sticky header shortcuts for inbox and public preview.
+  - Admin dashboards, content rows, grouped profile/settings forms, media controls, filters, loading states, and full-screen mobile editors use responsive layouts, phone-safe input sizes, and touch-friendly controls down to 320px screens.
   - Project cards expose saved GitHub and live-project URLs as accessible icon actions that open in a new tab, while the title retains the detail-page link and the card surface opens its gallery.
   - Projects support up to 20 ordered photos and videos with per-item view, image adjustment, replacement, deletion, and ordering controls; clicking a public project card opens a responsive keyboard-accessible media carousel.
   - All attached media use profile-style cards with view, edit/replace, and delete actions; project images reuse crop adjustments, and removals are committed only when the form is saved.
@@ -35,6 +37,7 @@ completed:
   - Provisioned production D1 portfolio-cms and private R2 portfolio-cms-media, applied all migrations, configured Worker secrets, and deployed portfolio-cms-api.
   - Created the Vercel mrarcoder project, configured WORKER_API_URL, and deployed the production frontend at https://mrarcoder.vercel.app.
 checks:
+  - Admin redesign passes ESLint, Node tests, optimized production build, YAML parsing, and diff validation; responsive rules cover desktop, tablet drawer, phone forms, full-screen modals, inbox filters, content actions, and media controls.
   - All project YAML files parse successfully.
   - Every file reference in docs/AGENTS.yml resolves.
   - ESLint, focused Node tests, Worker dry-run bundle, and optimized Next.js production build pass.
