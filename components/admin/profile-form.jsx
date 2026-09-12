@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ProfilePhotoEditor from "./profile-photo-editor";
-import MediaViewer from "./media-viewer";
+import MediaField from "./media-field";
 import Icon from "../ui/icon";
 import Toast from "../ui/toast";
 
@@ -14,6 +14,8 @@ export default function ProfileForm({ initial }) {
   const [error,setError] = useState(false);
   const [busy,setBusy] = useState(false);
   const [photoFile,setPhotoFile] = useState(null);
+  const [resumeFile,setResumeFile] = useState(null);
+  const [savedMedia,setSavedMedia] = useState(initial);
 
   async function upload(file,kind) {
     if (!file) return null;
@@ -28,7 +30,6 @@ export default function ProfileForm({ initial }) {
 
   async function save(event) {
     event.preventDefault();
-    const resumeFile = event.currentTarget.elements.namedItem("resume")?.files?.[0];
     setBusy(true);setMessage("");
     let photo = null;let resume = null;
     try {
@@ -38,8 +39,8 @@ export default function ProfileForm({ initial }) {
       const response = await fetch("/api/admin/profile",{ method:"PUT",headers:{ "Content-Type":"application/json" },body:JSON.stringify(payload) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error);
-      await Promise.allSettled([photo && form.photo_media_id ? fetch(`/api/admin/media/${form.photo_media_id}`,{ method:"DELETE" }) : null,resume && form.resume_media_id ? fetch(`/api/admin/media/${form.resume_media_id}`,{ method:"DELETE" }) : null].filter(Boolean));
-      setForm(payload);setPhotoFile(null);setError(false);setMessage("Profile saved successfully.");
+      await Promise.allSettled(["photo_media_id","resume_media_id"].map((key) => savedMedia[key]).filter((id) => id && id !== payload.photo_media_id && id !== payload.resume_media_id).map((id) => fetch(`/api/admin/media/${id}`, { method:"DELETE" })));
+      setForm(payload);setSavedMedia(payload);setPhotoFile(null);setResumeFile(null);setError(false);setMessage("Profile saved successfully.");
     } catch (caught) {
       if (photo) await fetch(`/api/admin/media/${photo}`,{ method:"DELETE" });
       if (resume) await fetch(`/api/admin/media/${resume}`,{ method:"DELETE" });
@@ -47,5 +48,5 @@ export default function ProfileForm({ initial }) {
     } finally { setBusy(false); }
   }
 
-  return <><form className="panel editor-form profile-editor" onSubmit={save}>{fields.map(([name,label,type="text"]) => <label className="field" key={name}><span>{label}</span>{type === "textarea" ? <textarea value={form[name] || ""} onChange={(event) => setForm({ ...form,[name]:event.target.value })}/> : <input type={type} value={form[name] || ""} onChange={(event) => setForm({ ...form,[name]:event.target.value })}/>}</label>)}<ProfilePhotoEditor currentMediaId={form.photo_media_id} file={photoFile} onFileChange={setPhotoFile}/><div className="field file-field"><label htmlFor="resume-upload">Résumé PDF</label><input id="resume-upload" name="resume" type="file" accept="application/pdf"/><small>{form.resume_media_id ? "Choose another PDF to replace the current résumé." : "PDF · maximum 3 MiB"}</small><MediaViewer mediaId={form.resume_media_id} type="pdf" label="Résumé PDF"/></div><div className="form-actions"><button className="button icon-only no-margin" disabled={busy} aria-label={busy ? "Saving profile" : "Save profile"} title="Save profile"><Icon name={busy ? "reset" : "apply"} className={busy ? "icon-spinning" : ""}/></button></div></form><Toast message={message} clear={setMessage} error={error}/></>;
+  return <><form className="panel editor-form profile-editor" onSubmit={save}>{fields.map(([name,label,type="text"]) => <label className="field" key={name}><span>{label}</span>{type === "textarea" ? <textarea value={form[name] || ""} onChange={(event) => setForm({ ...form,[name]:event.target.value })}/> : <input type={type} value={form[name] || ""} onChange={(event) => setForm({ ...form,[name]:event.target.value })}/>}</label>)}<ProfilePhotoEditor currentMediaId={form.photo_media_id} file={photoFile} onFileChange={setPhotoFile} onRemove={() => { setPhotoFile(null); setForm({ ...form, photo_media_id:null }); }}/><MediaField label="Résumé PDF" type="pdf" mediaId={form.resume_media_id} file={resumeFile} onChange={setResumeFile} onRemove={() => { setResumeFile(null); setForm({ ...form, resume_media_id:null }); }}/><div className="form-actions"><button className="button icon-only no-margin" disabled={busy} aria-label={busy ? "Saving profile" : "Save profile"} title="Save profile"><Icon name={busy ? "reset" : "apply"} className={busy ? "icon-spinning" : ""}/></button></div></form><Toast message={message} clear={setMessage} error={error}/></>;
 }

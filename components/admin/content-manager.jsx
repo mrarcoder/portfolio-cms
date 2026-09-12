@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { fromRecord, resources, toPayload } from "../../lib/admin/resources";
 import SiteLogo, { siteHost } from "../portfolio/site-logo";
 import Icon from "../ui/icon";
-import MediaViewer from "./media-viewer";
+import MediaField from "./media-field";
 import Toast from "../ui/toast";
 
 function blank(fields) {
@@ -21,6 +21,7 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [files, setFiles] = useState({});
 
   useEffect(() => {
     if (!editing) return undefined;
@@ -32,17 +33,17 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
   }, [editing]);
 
   function start(row) {
+    setFiles({});
     setEditing(row?.id || "new");
     setForm(row ? fromRecord(resource, row) : blank(config.fields));
   }
 
   async function save(event) {
     event.preventDefault();
-    const formElement = event.currentTarget;
     const isNew = editing === "new";
     const payload = toPayload(resource, form);
     const fileFields = config.fields.filter(([, , type]) => ["image", "pdf", "video"].includes(type));
-    const selectedFiles = fileFields.map(([field]) => ({ field, file: formElement.elements.namedItem(field)?.files?.[0] })).filter(({ file }) => file);
+    const selectedFiles = fileFields.map(([field]) => ({ field, file: files[field] })).filter(({ file }) => file);
     const uploads = [];
     setBusy(true);
     setMessage("");
@@ -64,7 +65,8 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error);
-      await Promise.allSettled(uploads.filter(({ previousId }) => previousId).map(({ previousId }) => fetch(`/api/admin/media/${previousId}`, { method: "DELETE" })));
+      const previous = rows.find((row) => row.id === editing);
+      await Promise.allSettled(fileFields.map(([field]) => previous?.[field]).filter((id) => id && !fileFields.some(([field]) => Number(payload[field]) === Number(id))).map((id) => fetch(`/api/admin/media/${id}`, { method: "DELETE" })));
       try {
         const refreshed = await fetch(`/api/admin/${resource}`);
         const refreshedResult = await refreshed.json();
@@ -129,7 +131,7 @@ export default function ContentManager({ resource, initialRows, categoryOptions 
             <form className="editor-form" onSubmit={save}>
               {config.fields.map(([name,label,type="text",required,options]) => {
                 if (type === "checkbox") return <label className="check-field" key={name}><input type="checkbox" checked={Boolean(form[name])} onChange={(event) => setForm({ ...form, [name]: event.target.checked })}/><span>{label}</span></label>;
-                if (["image","pdf","video"].includes(type)) return <div className="field file-field" key={name}><label htmlFor={`media-${name}`}>{label}</label><input id={`media-${name}`} name={name} type="file" accept={type === "image" ? "image/jpeg,image/png,image/webp" : type === "video" ? "video/mp4,video/webm" : "application/pdf"}/><small>{form[name] ? "Choose another file to replace the current one." : `${type === "video" ? "MP4 or WebM" : type === "image" ? "JPEG, PNG, or WebP" : "PDF"} · maximum 3 MiB`}</small><MediaViewer mediaId={form[name]} type={type} label={label}/></div>;
+                if (["image","pdf","video"].includes(type)) return <MediaField key={name} label={label} type={type} mediaId={form[name]} file={files[name]} onChange={(file) => setFiles((current) => ({ ...current, [name]: file }))} onRemove={() => { setFiles((current) => ({ ...current, [name]: null })); setForm((current) => ({ ...current, [name]: null })); }}/>;
                 return <label className="field" key={name}><span>{label}</span>{type === "textarea" ? <textarea value={form[name] ?? ""} required={required} onChange={(event) => setForm({ ...form, [name]: event.target.value })}/> : type === "select" ? <select value={form[name]} onChange={(event) => setForm({ ...form, [name]: event.target.value })}>{options.map((option) => <option key={option} value={option}>{option.replace("_", " ")}</option>)}</select> : type === "category" ? <select value={form[name] ?? ""} onChange={(event) => setForm({ ...form, [name]: event.target.value })}><option value="">Uncategorised</option>{categoryOptions.map((category) => <option key={category.id} value={category.id}>{category.name}{category.visible ? "" : " (hidden)"}</option>)}</select> : <><input type={type} value={form[name] ?? ""} required={required} onChange={(event) => setForm({ ...form, [name]: event.target.value })}/>{resource === "social-links" && name === "url" && siteHost(form[name]) && <span className="social-logo-preview"><SiteLogo url={form[name]} label={form.label}/><span>Logo detected from {siteHost(form[name])}</span></span>}</>}</label>;
               })}
               <div className="form-actions"><button className="button icon-only no-margin" type="submit" disabled={busy} aria-label={busy ? "Saving changes" : "Save changes"} title="Save changes"><Icon name="apply" className={busy ? "icon-spinning" : ""}/></button><button className="secondary-button icon-only" type="button" onClick={() => setEditing(null)} aria-label="Cancel changes" title="Cancel"><Icon name="cancel"/></button></div>

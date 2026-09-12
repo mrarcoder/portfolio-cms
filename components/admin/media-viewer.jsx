@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Icon from "../ui/icon";
 
-export default function MediaViewer({ mediaId, type, label }) {
+export default function MediaViewer({ mediaId, type, label, sourceUrl, compact = false }) {
   const [open, setOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState("");
   const [pdfError, setPdfError] = useState("");
-  const url = mediaId ? `/api/media/${mediaId}` : "";
+  const url = sourceUrl || (mediaId ? `/api/media/${mediaId}` : "");
   const titleId = `media-view-${mediaId}-${type}`;
 
   useEffect(() => {
@@ -53,11 +53,11 @@ export default function MediaViewer({ mediaId, type, label }) {
     };
   }, [open, type, url]);
 
-  if (!mediaId) return null;
+  if (!url) return null;
 
   return <>
-    <div className="current-media-row">
-      <span>Current file attached</span>
+    <div className={compact ? "media-view-action" : "current-media-row"}>
+      {!compact && <span>Current file attached</span>}
       <button className="secondary-button icon-only" type="button" onClick={() => setOpen(true)} aria-label={`View current ${label}`} title={`View current ${label}`}><Icon name="eye"/></button>
     </div>
     {open && createPortal(<div className="modal-backdrop media-viewer-backdrop" data-media-viewer role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setOpen(false)}>
