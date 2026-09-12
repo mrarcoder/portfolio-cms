@@ -67,6 +67,7 @@
   .section-heading { display: grid; gap: 15px; margin-bottom: 30px; }
   .section-intro { max-width: 100%; text-align: left; }
   .about-layout, .timeline article, .contact-grid, .project-body { grid-template-columns: 1fr; gap: 22px; }
+  .about-identity { padding: 0 0 22px; border-right: 0; border-bottom: 1px solid var(--line); }
   .timeline article { padding: 22px; }
   .timeline-index { display: none; }
   .project-grid, .simple-grid, .skill-groups { grid-template-columns: 1fr; }
