@@ -36,8 +36,8 @@ export default async function ProjectPage({ params }) {
           <p className="eyebrow">Technologies</p>
           <p>{project.technologies.join(" · ")}</p>
           <div className="project-links">
-            {project.github_url && <a href={project.github_url}>Source code ↗</a>}
-            {project.live_url && <a href={project.live_url}>Live project ↗</a>}
+            {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer">Source code ↗</a>}
+            {project.live_url && <a href={project.live_url} target="_blank" rel="noreferrer">Live project ↗</a>}
           </div>
         </div>
         <p className="pre-line section-copy">{project.description}</p>

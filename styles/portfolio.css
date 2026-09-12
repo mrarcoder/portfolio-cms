@@ -113,6 +113,10 @@
 .project-gallery-button { display: flex; flex: 0 0 auto; align-items: center; gap: 5px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--accent-bright); background: rgba(255,255,255,.025); cursor: pointer; }
 .project-gallery-button .action-icon { width: 14px; height: 14px; }
 .project-gallery-button span { font: 9px/1 monospace; }
+.project-card-links { display: flex; gap: 8px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.project-card-links a { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid var(--line); border-radius: 11px; color: var(--text); background: rgba(255,255,255,.025); transition: color .2s ease,border-color .2s ease,background .2s ease,transform .2s ease; }
+.project-card-links a:hover { border-color: var(--accent-bright); color: var(--accent-bright); background: color-mix(in srgb,var(--accent) 8%,transparent); transform: translateY(-2px); }
+.project-card-links .action-icon { width: 17px; height: 17px; }
 .project-carousel-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; padding: 28px; place-items: center; background: rgba(5,10,22,.78); backdrop-filter: blur(16px); animation: carousel-in .22s ease both; }
 .project-carousel { width: min(960px,100%); max-height: calc(100vh - 56px); overflow: auto; padding: 18px; border: 1px solid var(--line-bright); border-radius: 24px; background: color-mix(in srgb,var(--panel) 94%,#14213b); box-shadow: 0 35px 100px rgba(1,5,15,.62); }
 .project-carousel header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 2px 3px 16px; }
