@@ -1,4 +1,4 @@
-status: v1_release_prepared
+status: v1_released
 current_phase: 7
 implemented:
   - Content visibility now uses immediate-save switch controls on each admin list card instead of editor checkboxes; section settings use matching switches, and item visibility switches are disabled whenever their parent public section is off.
@@ -35,6 +35,8 @@ implemented:
   - Project saves snapshot every selected media file before asynchronous uploads begin, so an image and showcase video can be uploaded or replaced together without losing the form event reference.
   - Admin forms provide an eye-icon viewer for every attached project image, project video, certification PDF, and résumé; profile photos retain their existing viewer and editor.
 completed:
+  - Created the release branch for V1, configured Vercel production branch tracking to release, and disabled Vercel deployments from main.
+  - Removed the one-time SETUP_TOKEN from the production Worker after verifying owner setup was complete.
   - Production owner setup is complete, and the Vercel project is connected to the GitHub repository.
   - Documented private D1 export and restore rehearsal steps; prepared a release-only Vercel deployment rule.
   - User accepted the reduced V1 scope.
@@ -44,6 +46,7 @@ completed:
   - Provisioned production D1 portfolio-cms and private R2 portfolio-cms-media, applied all migrations, configured Worker secrets, and deployed portfolio-cms-api.
   - Created the Vercel mrarcoder project, configured WORKER_API_URL, and deployed the production frontend at https://mrarcoder.vercel.app.
 checks:
+  - Release preparation passes YAML parsing, package/version and Vercel config checks, lint, Node tests, optimized Next.js build, and diff validation; Vercel API confirms the GitHub link tracks release.
   - Visibility switches pass lint, Node tests, optimized build, Worker dry-run bundling, diff validation, and an isolated authenticated end-to-end smoke covering PATCH allowlisting, persistence, public section guards, desktop/mobile rendering, and real browser interaction.
   - Revised slate light theme verified in Chrome at 1440x1100 and 390x844 across the hero and content sections; contrast, glass depth, navigation, typography, and mobile stacking remain clear.
   - Light-theme refinement passes lint, tests, optimized build, and diff validation; forced-mode Chrome renders verify the hero at 1440x1100 and 390x844 plus the phone About card with production content.
@@ -69,8 +72,9 @@ checks:
   - Lint and the optimized production build pass after fixing sequential project image/video uploads.
   - Lint, Node tests, optimized production build, YAML parsing, and diff checks pass after adding current-file viewers for project media, certification PDFs, and the résumé.
 blockers: []
-next_action: Create and tag the V1 release branch, switch Vercel production tracking to release, and verify branch-triggered deployment; remove the one-time SETUP_TOKEN if still configured.
+next_action: Develop V2 locally on main; before publishing, back up D1, merge reviewed work into release, deploy any Worker or migration changes separately, and verify production.
 decisions:
+  - Vercel production follows release; main remains the local development branch and does not trigger Vercel deployments.
   - One Next.js application and one Worker; no monorepo packages.
   - One theme; no blog, theme ecosystem, or import/export in V1.
   - Use same-origin API forwarding so browser sessions work on provider subdomains.
