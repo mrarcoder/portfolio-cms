@@ -212,7 +212,7 @@ The response should report `status: ready`.
 3. Add `WORKER_API_URL` to Production with the Worker HTTPS origin. Do not add `/api` or a trailing path.
 4. Deploy the project.
 
-Vercel automatically deploys future pushes from the connected Git repository. Environment changes apply only to new deployments, so redeploy after changing `WORKER_API_URL`. See [Vercel's GitHub deployment guide](https://vercel.com/docs/git/vercel-for-github) and [environment-variable documentation](https://vercel.com/docs/environment-variables/managing-environment-variables).
+For the `mrarcoder` production project, Vercel tracks the `release` branch. Pushes to `release` deploy the frontend to `mrarcoder.vercel.app`; `main` is for local development and its Vercel deployments are disabled by `vercel.json`. For a new installation, select its intended production branch under **Project Settings → Environments → Production → Branch Tracking**. Environment changes apply only to new deployments, so redeploy after changing `WORKER_API_URL`. See [Vercel's Git branch guide](https://vercel.com/docs/git) and [environment-variable documentation](https://vercel.com/docs/environment-variables/managing-environment-variables).
 
 ### 8. Finalize the production origin
 
@@ -240,6 +240,33 @@ npx wrangler secret delete SETUP_TOKEN --config worker/wrangler.jsonc
 ```
 
 Do not delete or rotate `AUTH_PEPPER` while the account is in use.
+
+## Releasing from `main`
+
+Keep daily development on `main` and test it locally. When ready to publish, back up D1, review any Worker or migration changes, then merge the selected `main` commit into `release` and push `release`:
+
+```bash
+git switch release
+git merge --ff-only main
+git push origin release
+git switch main
+```
+
+The `release` push triggers a Vercel production deployment. A code tag such as `v1.0.0` identifies the shipped revision; the tag itself does not trigger deployment. If the release changes `worker/` or `database/migrations/`, apply reviewed migrations and deploy the Cloudflare Worker separately using the commands above. Verify `/api/health` and the affected public/admin flows after each release. Never run `vercel deploy --prod` from an unreviewed `main` checkout, because a manual production deploy bypasses branch tracking.
+
+## D1 backup
+
+Before a release or database migration, export production D1 to a private location outside this repository:
+
+```bash
+umask 077
+mkdir -p "$HOME/portfolio-cms-backups" && chmod 700 "$HOME/portfolio-cms-backups"
+backup_path="$HOME/portfolio-cms-backups/portfolio-cms-$(date +%F-%H%M%S).sql"
+npx wrangler d1 export portfolio-cms --remote --config worker/wrangler.jsonc --output "$backup_path"
+test -s "$backup_path" && chmod 600 "$backup_path"
+```
+
+The SQL file contains private portfolio and account data. Keep an encrypted copy elsewhere, and rehearse restores into a **new, empty D1 database** before relying on it. See [docs/BACKUP.yml](docs/BACKUP.yml) for the restore steps. R2 media requires a separate backup; it is not included in D1 exports.
 
 ## Production verification
 

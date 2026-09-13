@@ -1,0 +1,17 @@
+purpose: Keep a private SQL export of the production D1 schema and data before releases and database changes.
+database: portfolio-cms
+export:
+  - Run from the repository root after npx wrangler login.
+  - Save outside the Git working tree; the export includes account records, session hashes, contact messages, and other private content.
+  - 'umask 077; mkdir -p "$HOME/portfolio-cms-backups" && chmod 700 "$HOME/portfolio-cms-backups"'
+  - 'backup_path="$HOME/portfolio-cms-backups/portfolio-cms-$(date +%F-%H%M%S).sql"'
+  - 'npx wrangler d1 export portfolio-cms --remote --config worker/wrangler.jsonc --output "$backup_path"'
+  - 'test -s "$backup_path" && chmod 600 "$backup_path"'
+  - Store another encrypted copy away from this computer and periodically verify that the file can be read.
+restore:
+  - First test the export against a new, empty D1 database; do not import it over the live database.
+  - 'npx wrangler d1 create portfolio-cms-restore'
+  - 'npx wrangler d1 execute portfolio-cms-restore --remote --file "$HOME/portfolio-cms-backups/portfolio-cms-YYYY-MM-DD.sql"'
+  - Verify tables and representative content in the restore database before planning any production binding change.
+  - A D1 export does not include R2 media objects; back up the R2 bucket separately if media recovery is required.
+  - D1 Time Travel can help with recent mistakes but does not replace an independent export.

@@ -1,4 +1,4 @@
-status: Ready for configuration after the owner supplies existing Cloudflare D1 and R2 resource details.
+status: V1 production configured; use the README release workflow for future updates.
 prerequisites:
   - Cloudflare account with one D1 database and one R2 bucket.
   - Vercel account connected to the GitHub repository.
@@ -20,6 +20,7 @@ cloudflare:
     - Record the resulting workers.dev origin for Vercel.
 vercel:
   root: Repository root.
+  production_branch: release for the mrarcoder project; main is local development and does not trigger Vercel deployments.
   environment:
     WORKER_API_URL: Exact HTTPS Worker origin without an /api suffix or trailing path.
   deploy: Import the GitHub repository and deploy after the Worker is reachable.

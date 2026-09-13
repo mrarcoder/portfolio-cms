@@ -1,4 +1,4 @@
-status: production_deployed_awaiting_owner_setup
+status: v1_release_prepared
 current_phase: 7
 implemented:
   - Content visibility now uses immediate-save switch controls on each admin list card instead of editor checkboxes; section settings use matching switches, and item visibility switches are disabled whenever their parent public section is off.
@@ -35,6 +35,8 @@ implemented:
   - Project saves snapshot every selected media file before asynchronous uploads begin, so an image and showcase video can be uploaded or replaced together without losing the form event reference.
   - Admin forms provide an eye-icon viewer for every attached project image, project video, certification PDF, and résumé; profile photos retain their existing viewer and editor.
 completed:
+  - Production owner setup is complete, and the Vercel project is connected to the GitHub repository.
+  - Documented private D1 export and restore rehearsal steps; prepared a release-only Vercel deployment rule.
   - User accepted the reduced V1 scope.
   - Created YAML specifications for scope, boundaries, architecture, data/API, and delivery order.
   - Implemented all six local roadmap phases without adding deferred features.
@@ -66,10 +68,8 @@ checks:
   - Project video smoke coverage verifies authenticated upload, project association, public visibility, portfolio serialization, and rendered preview markup.
   - Lint and the optimized production build pass after fixing sequential project image/video uploads.
   - Lint, Node tests, optimized production build, YAML parsing, and diff checks pass after adding current-file viewers for project media, certification PDFs, and the résumé.
-blockers:
-  - The owner must choose the production administrator username and password through /setup.
-  - The Vercel account must authorize the GitHub repository before automatic deployments from main can be enabled; CLI deployment remains available.
-next_action: Complete first-owner setup, delete the one-time SETUP_TOKEN, connect GitHub in Vercel, and verify authenticated production workflows.
+blockers: []
+next_action: Create and tag the V1 release branch, switch Vercel production tracking to release, and verify branch-triggered deployment; remove the one-time SETUP_TOKEN if still configured.
 decisions:
   - One Next.js application and one Worker; no monorepo packages.
   - One theme; no blog, theme ecosystem, or import/export in V1.

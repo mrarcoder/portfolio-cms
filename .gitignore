@@ -16,3 +16,4 @@ worker/.dev.vars*
 .agents/
 coverage/
 .vercel
+backups/
