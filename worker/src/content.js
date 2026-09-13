@@ -14,6 +14,7 @@ const resourceSpecs = {
   certifications: { table: "certifications", fields: ["name","issuer","issue_date","expiry_date","credential_id","credential_url","file_media_id","visible"], required: ["name","issuer","issue_date"], dates: ["issue_date","expiry_date"], booleans: ["visible"], integers: ["file_media_id"] },
   "social-links": { table: "social_links", fields: ["label","url","visible"], required: ["label","url"], booleans: ["visible"], timestamps: false },
 };
+const resourceSections = { experiences:"experience",education:"education","skill-categories":"skills",skills:"skills",projects:"projects",achievements:"achievements",certifications:"certifications","social-links":"contact" };
 
 function validUrl(value) { if (!value) return true; try { return ["http:","https:"].includes(new URL(value).protocol); } catch { return false; } }
 function validDate(value) { return datePattern.test(value) && new Date(`${value}T00:00:00Z`).toISOString().slice(0,10) === value; }
@@ -90,6 +91,16 @@ export async function adminResource(request, env, resource, id) {
       result.results = result.results.map((row) => ({ ...row,media:media.get(row.id) || [] }));
     }
     return json({ success:true, data:result.results });
+  }
+  if (request.method === "PATCH" && id) {
+    const input = await readJson(request);
+    if (!input || Object.keys(input).length !== 1 || typeof input.visible !== "boolean") return json({ success:false,error:"Invalid visibility" },422);
+    const setting = await env.DB.prepare("SELECT value_json FROM settings WHERE key = 'enabled_sections'").first();
+    const enabled = setting ? JSON.parse(setting.value_json) : {};
+    if (enabled[resourceSections[resource]] === false) return json({ success:false,error:"Enable this section in Settings before changing visibility." },409);
+    const suffix = spec.timestamps === false ? "" : ", updated_at = CURRENT_TIMESTAMP";
+    const result = await env.DB.prepare(`UPDATE ${spec.table} SET visible = ?${suffix} WHERE id = ?`).bind(Number(input.visible),id).run();
+    return result.meta.changes ? json({ success:true,data:{ id,visible:input.visible } }) : json({ success:false,error:"Not found" },404);
   }
   if (request.method === "DELETE" && id) {
     const result = await env.DB.prepare(`DELETE FROM ${spec.table} WHERE id = ?`).bind(id).run();

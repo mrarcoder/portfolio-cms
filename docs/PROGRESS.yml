@@ -1,6 +1,7 @@
 status: production_deployed_awaiting_owner_setup
 current_phase: 7
 implemented:
+  - Content visibility now uses immediate-save switch controls on each admin list card instead of editor checkboxes; section settings use matching switches, and item visibility switches are disabled whenever their parent public section is off.
   - Light mode uses a professional medium-light slate palette with blue-gray glass surfaces, dark navy text, restrained teal accents, visible grid depth, and stronger shadows, preserving the dark theme's atmosphere without using a white interface.
   - The About section uses a compact profile summary for title and location beside the long biography, removing the oversized duplicated short bio and collapsing to a clean stacked layout on phones.
   - The public portfolio now uses an active-section desktop navigation and an accessible tablet/phone drawer, with background scroll locking, clear focus behavior, and 44px touch controls.
@@ -41,6 +42,7 @@ completed:
   - Provisioned production D1 portfolio-cms and private R2 portfolio-cms-media, applied all migrations, configured Worker secrets, and deployed portfolio-cms-api.
   - Created the Vercel mrarcoder project, configured WORKER_API_URL, and deployed the production frontend at https://mrarcoder.vercel.app.
 checks:
+  - Visibility switches pass lint, Node tests, optimized build, Worker dry-run bundling, diff validation, and an isolated authenticated end-to-end smoke covering PATCH allowlisting, persistence, public section guards, desktop/mobile rendering, and real browser interaction.
   - Revised slate light theme verified in Chrome at 1440x1100 and 390x844 across the hero and content sections; contrast, glass depth, navigation, typography, and mobile stacking remain clear.
   - Light-theme refinement passes lint, tests, optimized build, and diff validation; forced-mode Chrome renders verify the hero at 1440x1100 and 390x844 plus the phone About card with production content.
   - Corrected About presentation passes lint, tests, optimized build, diff validation, and a content-backed 390px visual render showing balanced title, location, divider, and biography flow.

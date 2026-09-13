@@ -63,18 +63,23 @@ const experienceId = await create("experiences", { company:"Example Co",position
 await create("education", { institution:"Example University",degree:"BS Computer Science",field:"Computer Science",start_date:"2020-01-01",end_date:"2023-12-01",description:"",visible:true });
 const categoryId = await create("skill-categories", { name:"Engineering",visible:true });
 await create("skills", { category_id:categoryId,name:"JavaScript",visible:true });
-const visibleProjectId = await create("projects", { title:"Visible project",slug:"visible-project",summary:"Public work",description:"Project details",image_media_id:imageId,video_media_id:videoId,technologies_json:["Next.js","Cloudflare"],github_url:"https://github.com/example/project",live_url:"",start_date:"2025-01-01",end_date:"",progress:"completed",visible:true });
-const hiddenProjectId = await create("projects", { title:"Hidden project",slug:"hidden-project",summary:"Private draft",description:"Draft",image_media_id:hiddenImageId,technologies_json:[],github_url:"",live_url:"",start_date:"2026-01-01",end_date:"",progress:"in_progress",visible:false });
-await create("achievements", { title:"Award",organization:"Example",date:"2025-02-01",description:"An achievement",url:"https://example.com/award",visible:true });
+const visibleProjectId = await create("projects", { title:"Visible project",slug:"visible-project",summary:"Public work",description:"Project details",image_media_id:imageId,video_media_id:videoId,gallery_media:[{ id:imageId,type:"image" },{ id:videoId,type:"video" }],technologies_json:["Next.js","Cloudflare"],github_url:"https://github.com/example/project",live_url:"",start_date:"2025-01-01",end_date:"",progress:"completed",visible:true });
+const hiddenProjectId = await create("projects", { title:"Hidden project",slug:"hidden-project",summary:"Private draft",description:"Draft",image_media_id:hiddenImageId,video_media_id:null,gallery_media:[{ id:hiddenImageId,type:"image" }],technologies_json:[],github_url:"",live_url:"",start_date:"2026-01-01",end_date:"",progress:"in_progress",visible:false });
+const achievementId = await create("achievements", { title:"Award",organization:"Example",date:"2025-02-01",description:"An achievement",url:"https://example.com/award",visible:true });
 await create("certifications", { name:"Certificate",issuer:"Example",issue_date:"2025-03-01",expiry_date:"",credential_id:"ABC",credential_url:"https://example.com/certificate",file_media_id:null,visible:true });
 await create("social-links", { label:"GitHub",url:"https://github.com/example",visible:true });
 
 ok(await api("/admin/projects/order", { method:"PUT", body:{ ids:[hiddenProjectId,visibleProjectId] } }), 200);
+ok(await api(`/admin/projects/${hiddenProjectId}`, { method:"PATCH",body:{ visible:true } }), 200);
+assert.equal(ok(await api("/admin/projects"), 200).find((item) => item.id === hiddenProjectId).visible, 1);
+ok(await api(`/admin/projects/${hiddenProjectId}`, { method:"PATCH",body:{ visible:false } }), 200);
+assert.equal((await api(`/admin/projects/${hiddenProjectId}`, { method:"PATCH",body:{ visible:false,title:"Not allowed" } })).response.status, 422);
 assert.equal((await api(`/media/${hiddenImageId}`, { useCookie:false })).response.status, 404);
 assert.equal((await api(`/media/${imageId}`, { useCookie:false })).response.status, 200);
 assert.equal((await api(`/media/${videoId}`, { useCookie:false })).response.status, 200);
 
 ok(await api("/admin/settings", { method:"PUT", body:{ site_name:"Ada Portfolio",site_description:"A software portfolio",site_url:base,primary_color:"#315c4b",color_mode:"light",enabled_sections:{experience:true,education:true,skills:true,projects:true,achievements:false,certifications:true,contact:true},seo_title:"Ada Example",seo_description:"Ada's portfolio" } }), 200);
+assert.equal((await api(`/admin/achievements/${achievementId}`, { method:"PATCH",body:{ visible:false } })).response.status, 409);
 const portfolio = ok(await api("/portfolio"), 200);
 assert.deepEqual(portfolio.projects.map((item) => item.slug), ["visible-project"]);
 assert.equal(portfolio.achievements.length, 0);

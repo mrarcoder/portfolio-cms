@@ -43,7 +43,7 @@ api:
     public: GET /portfolio; GET /projects/:slug; GET /media/:id; POST /messages.
     admin_profile: GET and PUT /admin/profile.
     admin_summary: GET /admin/summary with small dashboard counts.
-    admin_lists: GET and POST /admin/:resource; PUT and DELETE /admin/:resource/:id.
+    admin_lists: GET and POST /admin/:resource; PUT and DELETE /admin/:resource/:id; PATCH /admin/:resource/:id with only visible for immediate card-level visibility changes when its public section is enabled.
     ordering: PUT /admin/:resource/order with validated IDs in desired order.
     settings: GET and PUT /admin/settings with field allowlist.
     files: POST /admin/media multipart upload; DELETE /admin/media/:id if unreferenced.

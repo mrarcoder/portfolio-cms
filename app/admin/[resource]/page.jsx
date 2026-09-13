@@ -11,10 +11,11 @@ export default async function ResourcePage({ params }) {
   if (!resources[resource]) notFound();
 
   const cookie = (await cookies()).toString();
-  const [rows, categoryOptions] = await Promise.all([
+  const [rows, categoryOptions, settings] = await Promise.all([
     getApi(`/admin/${resource}`, { cookie }),
     resource === "skills" ? getApi("/admin/skill-categories", { cookie }) : Promise.resolve([]),
+    getApi("/admin/settings", { cookie }),
   ]);
 
-  return <ContentManager resource={resource} initialRows={rows} categoryOptions={categoryOptions}/>;
+  return <ContentManager resource={resource} initialRows={rows} categoryOptions={categoryOptions} enabledSections={settings.enabled_sections || {}}/>;
 }
