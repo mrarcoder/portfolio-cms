@@ -24,6 +24,14 @@ vercel:
   environment:
     WORKER_API_URL: Exact HTTPS Worker origin without an /api suffix or trailing path.
   deploy: Import the GitHub repository and deploy after the Worker is reachable.
+worker_builds:
+  worker: Existing portfolio-cms-api Worker; connect it to GitHub repository mrarcoder/portfolio-cms.
+  production_branch: release
+  non_production_builds: false
+  root_directory: /
+  build_command: empty
+  deploy_command: npx wrangler deploy --config worker/wrangler.jsonc
+  migrations: Back up D1, review and apply remote migrations before a release that needs them; Builds deploys Worker code only.
 initial_setup:
   - Open https://your-frontend.example/setup.
   - Enter the same SETUP_TOKEN and create the single owner.

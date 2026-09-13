@@ -252,7 +252,21 @@ git push origin release
 git switch main
 ```
 
-The `release` push triggers a Vercel production deployment. A code tag such as `v1.0.0` identifies the shipped revision; the tag itself does not trigger deployment. If the release changes `worker/` or `database/migrations/`, apply reviewed migrations and deploy the Cloudflare Worker separately using the commands above. Verify `/api/health` and the affected public/admin flows after each release. Never run `vercel deploy --prod` from an unreviewed `main` checkout, because a manual production deploy bypasses branch tracking.
+The `release` push triggers a Vercel production deployment. A code tag such as `v1.0.0` identifies the shipped revision; the tag itself does not trigger deployment. Once the existing Worker is connected to Cloudflare Workers Builds as described below, the same push also deploys the Worker. D1 migrations are still a reviewed manual step: back up D1 and apply required migrations before pushing a release that needs them. Verify `/api/health` and the affected public/admin flows after each release. Never run `vercel deploy --prod` from an unreviewed `main` checkout, because a manual production deploy bypasses branch tracking.
+
+### Connect the existing Worker to `release`
+
+In Cloudflare **Workers & Pages → portfolio-cms-api → Settings → Builds → Connect**, authorize the GitHub repository `mrarcoder/portfolio-cms`. Configure the build for the **existing** Worker with these settings:
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `release` |
+| Builds for non-production branches | Off |
+| Root directory | Repository root (`/`) |
+| Build command | Empty |
+| Deploy command | `npx wrangler deploy --config worker/wrangler.jsonc` |
+
+Keep runtime secrets such as `AUTH_PEPPER` in the Worker's Variables & Secrets settings, never in Git or build variables. Confirm the first Cloudflare build succeeds and that the Worker still answers `/api/health`. [Cloudflare's existing-Worker connection guide](https://developers.cloudflare.com/workers/ci-cd/builds/) covers the dashboard flow. Vercel and Cloudflare build independently from the same push, so changes that need a strict backend-first order should be released in compatible stages.
 
 ## D1 backup
 

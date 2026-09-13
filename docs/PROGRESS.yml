@@ -46,6 +46,7 @@ completed:
   - Provisioned production D1 portfolio-cms and private R2 portfolio-cms-media, applied all migrations, configured Worker secrets, and deployed portfolio-cms-api.
   - Created the Vercel mrarcoder project, configured WORKER_API_URL, and deployed the production frontend at https://mrarcoder.vercel.app.
 checks:
+  - Cloudflare Worker deploy command passes Wrangler dry-run bundling with the production D1 and R2 bindings; the first Git-connected build remains to be verified after the initial release push.
   - Release preparation passes YAML parsing, package/version and Vercel config checks, lint, Node tests, optimized Next.js build, and diff validation; Vercel API confirms the GitHub link tracks release.
   - Visibility switches pass lint, Node tests, optimized build, Worker dry-run bundling, diff validation, and an isolated authenticated end-to-end smoke covering PATCH allowlisting, persistence, public section guards, desktop/mobile rendering, and real browser interaction.
   - Revised slate light theme verified in Chrome at 1440x1100 and 390x844 across the hero and content sections; contrast, glass depth, navigation, typography, and mobile stacking remain clear.
@@ -72,7 +73,7 @@ checks:
   - Lint and the optimized production build pass after fixing sequential project image/video uploads.
   - Lint, Node tests, optimized production build, YAML parsing, and diff checks pass after adding current-file viewers for project media, certification PDFs, and the résumé.
 blockers: []
-next_action: Develop V2 locally on main; before publishing, back up D1, merge reviewed work into release, deploy any Worker or migration changes separately, and verify production.
+next_action: Verify the first Cloudflare build from the release branch and production health, then develop V2 locally on main; apply any D1 migrations separately before releases.
 decisions:
   - Vercel production follows release; main remains the local development branch and does not trigger Vercel deployments.
   - One Next.js application and one Worker; no monorepo packages.
