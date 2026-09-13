@@ -35,6 +35,7 @@ implemented:
   - Project saves snapshot every selected media file before asynchronous uploads begin, so an image and showcase video can be uploaded or replaced together without losing the form event reference.
   - Admin forms provide an eye-icon viewer for every attached project image, project video, certification PDF, and résumé; profile photos retain their existing viewer and editor.
 completed:
+  - Connected the existing portfolio-cms-api Worker to GitHub release-only Workers Builds with the explicit worker/wrangler.jsonc deploy command; the corrected release build succeeded.
   - Created the release branch for V1, configured Vercel production branch tracking to release, and disabled Vercel deployments from main.
   - Removed the one-time SETUP_TOKEN from the production Worker after verifying owner setup was complete.
   - Production owner setup is complete, and the Vercel project is connected to the GitHub repository.
@@ -46,8 +47,8 @@ completed:
   - Provisioned production D1 portfolio-cms and private R2 portfolio-cms-media, applied all migrations, configured Worker secrets, and deployed portfolio-cms-api.
   - Created the Vercel mrarcoder project, configured WORKER_API_URL, and deployed the production frontend at https://mrarcoder.vercel.app.
 checks:
-  - The release-only Cloudflare Git connection triggered Workers Builds for commit 79db044, but its first build failed because Cloudflare executed the default npx wrangler deploy command from the repository root and attempted to migrate the Next.js frontend through OpenNext. The active Worker and same-origin production /api/health remain healthy.
-  - Cloudflare Worker deploy command passes Wrangler dry-run bundling with the production D1 and R2 bindings; the first Git-connected build remains to be verified after the initial release push.
+  - Cloudflare Workers Builds completed successfully for release commit faec6ae; Wrangler confirms a new active Worker version, and the production same-origin /api/health reports ready. The initial build failed because Cloudflare had used the default root-level deploy command; the explicit Worker config path resolved it.
+  - Cloudflare Worker deploy command passes CI-mode Wrangler dry-run bundling with the production D1 and R2 bindings.
   - Release preparation passes YAML parsing, package/version and Vercel config checks, lint, Node tests, optimized Next.js build, and diff validation; Vercel API confirms the GitHub link tracks release.
   - Visibility switches pass lint, Node tests, optimized build, Worker dry-run bundling, diff validation, and an isolated authenticated end-to-end smoke covering PATCH allowlisting, persistence, public section guards, desktop/mobile rendering, and real browser interaction.
   - Revised slate light theme verified in Chrome at 1440x1100 and 390x844 across the hero and content sections; contrast, glass depth, navigation, typography, and mobile stacking remain clear.
@@ -73,9 +74,8 @@ checks:
   - Project video smoke coverage verifies authenticated upload, project association, public visibility, portfolio serialization, and rendered preview markup.
   - Lint and the optimized production build pass after fixing sequential project image/video uploads.
   - Lint, Node tests, optimized production build, YAML parsing, and diff checks pass after adding current-file viewers for project media, certification PDFs, and the résumé.
-blockers:
-  - Save npx wrangler deploy --config worker/wrangler.jsonc as the Cloudflare Workers Builds deploy command, retry the failed build, and verify a successful release-branch deployment.
-next_action: Verify that Cloudflare runs the corrected deploy command and production health remains ready; apply D1 migrations separately before releases.
+blockers: []
+next_action: Develop V2 locally on main; back up D1 and apply any required migrations before publishing a release, then verify both Vercel and Worker deployments.
 decisions:
   - Vercel production follows release; main remains the local development branch and does not trigger Vercel deployments.
   - One Next.js application and one Worker; no monorepo packages.
