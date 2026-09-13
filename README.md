@@ -268,6 +268,8 @@ In Cloudflare **Workers & Pages → portfolio-cms-api → Settings → Builds �
 
 Keep runtime secrets such as `AUTH_PEPPER` in the Worker's Variables & Secrets settings, never in Git or build variables. Confirm the first Cloudflare build succeeds and that the Worker still answers `/api/health`. [Cloudflare's existing-Worker connection guide](https://developers.cloudflare.com/workers/ci-cd/builds/) covers the dashboard flow. Vercel and Cloudflare build independently from the same push, so changes that need a strict backend-first order should be released in compatible stages.
 
+Check the build log before treating the connection as complete: it must show `Executing user deploy command: npx wrangler deploy --config worker/wrangler.jsonc`. If it only shows `npx wrangler deploy`, edit the Worker's **Settings → Builds → Build configuration** and retry. The root directory contains the Next.js frontend, so the default command targets the wrong application.
+
 ## D1 backup
 
 Before a release or database migration, export production D1 to a private location outside this repository:
